@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="colaborador" >
+
+    <select id="obtener-todos" resultType="pojo.Colaborador">
+        SELECT 
+        id_colaborador AS idColaborador,
+        no_personal AS noPersonal,
+        curp,
+        nombre, 
+        apellido_paterno AS apellidoPaterno, 
+        apellido_materno AS apellidoMaterno, 
+        email, 
+        rol, 
+        id_sucursal AS idSucursal,
+        licencia,
+        activo
+        FROM colaboradores
+    </select>
+    
+    <insert id="registrar" parameterType="pojo.Colaborador"> 
+        INSERT INTO colaboradores(
+        no_personal, curp, nombre, apellido_paterno, apellido_materno, 
+        email, contrasena, rol, id_sucursal, licencia, 
+        foto, foto_base64, activo) 
+        VALUES(
+        #{noPersonal}, #{curp}, #{nombre}, #{apellidoPaterno}, #{apellidoMaterno},
+        #{email}, #{contrasena}, #{rol}, #{idSucursal}, #{licencia},
+        #{foto}, #{fotoBase64}, #{activo})
+    </insert>
+    
+    <update id="editar" parameterType="pojo.Colaborador">
+        UPDATE colaboradores
+        SET 
+        no_personal = #{noPersonal},
+        curp = #{curp},
+        nombre = #{nombre}, 
+        apellido_paterno = #{apellidoPaterno}, 
+        apellido_materno = #{apellidoMaterno}, 
+        email = #{email},
+        rol = #{rol},
+        id_sucursal = #{idSucursal},
+        licencia = #{licencia},
+        activo = #{activo}
+        WHERE id_colaborador = #{idColaborador}
+    </update>
+    
+    <delete id="eliminar" parameterType="int">
+        DELETE FROM colaboradores
+        WHERE id_colaborador = #{idColaborador}
+    </delete>
+    
+    <update id="guardar-foto" parameterType="pojo.Colaborador"> 
+        UPDATE colaboradores
+        SET 
+        foto = #{foto},
+        foto_base64 = #{fotoBase64}
+        WHERE id_colaborador = #{idColaborador}
+    </update>
+    
+    <select id="obtener-foto" parameterType="int" resultType="pojo.Colaborador">
+        SELECT 
+        id_colaborador AS idColaborador, 
+        foto_base64 AS fotoBase64
+        FROM colaboradores 
+        WHERE id_colaborador = #{idColaborador}
+    </select>
+    
+</mapper>
