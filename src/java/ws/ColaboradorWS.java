@@ -94,7 +94,7 @@ public class ColaboradorWS {
         if (idColaborador != null && idColaborador > 0 && foto != null && foto.length > 0) {
             return ColaboradorImp.guardarFoto(idColaborador, foto);
         } else {
-            throw new BadRequestException("Datos de foto o ID inválidos");
+            throw new BadRequestException();
         }
     }
 
@@ -105,7 +105,7 @@ public class ColaboradorWS {
         if (idColaborador != null && idColaborador > 0) {
             return ColaboradorImp.obtenerFoto(idColaborador);
         } else {
-            throw new BadRequestException("ID inválido");
+            throw new BadRequestException();
         }
     }
 

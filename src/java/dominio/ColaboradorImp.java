@@ -5,7 +5,6 @@
 package dominio;
 
 import dto.Respuesta;
-import java.util.Base64;
 import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
@@ -129,20 +128,13 @@ public class ColaboradorImp {
 
     public static Respuesta guardarFoto(int idColaborador, byte[] foto) {
         Respuesta respuesta = new Respuesta();
-        respuesta.setError(true);
         SqlSession conexionBD = MyBatisUtil.getSession();
 
         if (conexionBD != null) {
             try {
                 Colaborador colaborador = new Colaborador();
                 colaborador.setIdColaborador(idColaborador);
-
                 colaborador.setFoto(foto);
-
-                if (foto != null && foto.length > 0) {
-                    String fotoBase64 = Base64.getEncoder().encodeToString(foto);
-                    colaborador.setFotoBase64(fotoBase64);
-                }
 
                 int filasAfectadas = conexionBD.update("colaborador.guardar-foto", colaborador);
                 conexionBD.commit();
@@ -151,14 +143,17 @@ public class ColaboradorImp {
                     respuesta.setError(false);
                     respuesta.setMensaje("Fotografía del colaborador actualizada correctamente.");
                 } else {
+                    respuesta.setError(true);
                     respuesta.setMensaje("No se pudo actualizar la imagen (ID no encontrado).");
                 }
             } catch (Exception e) {
-                respuesta.setMensaje("Error al guardar foto: " + e.getMessage());
+                respuesta.setError(true);
+                respuesta.setMensaje("Error en BD: " + e.getMessage());
             } finally {
                 conexionBD.close();
             }
         } else {
+            respuesta.setError(true);
             respuesta.setMensaje("No hay conexión con la base de datos.");
         }
 

@@ -25,11 +25,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         INSERT INTO colaboradores(
         no_personal, curp, nombre, apellido_paterno, apellido_materno, 
         email, contrasena, rol, id_sucursal, licencia, 
-        foto, foto_base64, activo) 
+        foto, activo) 
         VALUES(
         #{noPersonal}, #{curp}, #{nombre}, #{apellidoPaterno}, #{apellidoMaterno},
         #{email}, #{contrasena}, #{rol}, #{idSucursal}, #{licencia},
-        #{foto}, #{fotoBase64}, #{activo})
+        #{foto}, #{activo})
     </insert>
     
     <update id="editar" parameterType="pojo.Colaborador">
@@ -56,15 +56,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="guardar-foto" parameterType="pojo.Colaborador"> 
         UPDATE colaboradores
         SET 
-        foto = #{foto},
-        foto_base64 = #{fotoBase64}
-        WHERE id_colaborador = #{idColaborador}
+        foto = #{foto}  WHERE id_colaborador = #{idColaborador}
     </update>
     
     <select id="obtener-foto" parameterType="int" resultType="pojo.Colaborador">
         SELECT 
         id_colaborador AS idColaborador, 
-        foto_base64 AS fotoBase64
+        TO_BASE64(foto) AS fotoBase64 
         FROM colaboradores 
         WHERE id_colaborador = #{idColaborador}
     </select>
