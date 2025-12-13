@@ -1,0 +1,34 @@
+# NetBeans / Java web
+/nbproject/private/
+/build/
+/dist/
+/*.war
+/.netbeans_automatic_build
+/.netbeans_update_resources
+
+# class files
+**/*.class
+
+# logs, temp
+logs/
+*.log
+/tmp/
+/temp/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Evitar subir el config con credenciales
+modelo/mybatis/mybatis-config.xml
+src/java/modelo/mybatis/mybatis-config.xml
+build/web/WEB-INF/classes/modelo/mybatis/mybatis-config.xml
+
+# opcional: no subir librerías si las manejas con Maven/Gradle
+WEB-INF/lib/
+lib/

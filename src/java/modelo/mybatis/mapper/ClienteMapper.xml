@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cliente">
+
+  <resultMap id="ClienteResultMap" type="pojo.Cliente">
+    <id property="id" column="id" />
+    <result property="nombre" column="nombre"/>
+    <result property="apellido" column="apellido"/>
+    <result property="correo" column="correo"/>
+    <result property="telefono" column="telefono"/>
+    <result property="calle" column="calle"/>
+    <result property="num_ext" column="num_ext"/>
+    <result property="colonia" column="colonia"/>
+    <result property="cp" column="cp"/>
+  </resultMap>
+
+  <!-- obtener todos -->
+  <select id="obtener-todos" resultMap="ClienteResultMap">
+    SELECT id, nombre, apellido, correo, telefono, calle, num_ext, colonia, cp
+    FROM clientes
+    ORDER BY nombre
+  </select>
+
+  <!-- obtener por id -->
+  <select id="obtener_por_id" parameterType="int" resultMap="ClienteResultMap">
+    SELECT id, nombre, apellido, correo, telefono, calle, num_ext, colonia, cp
+    FROM clientes
+    WHERE id = #{value}
+  </select>
+
+  <!-- verificar correo existente -->
+  <select id="verificar_correo" parameterType="string" resultType="int">
+    SELECT COUNT(*) FROM clientes WHERE correo = #{correo}
+  </select>
+
+  <!-- verificar correo para editar (excluir el id actual) -->
+  <select id="verificar_correo_editar" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM clientes WHERE correo = #{correo} AND id != #{id}
+  </select>
+
+  <!-- registrar -->
+  <insert id="registrar" parameterType="pojo.Cliente" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO clientes (nombre, apellido, correo, telefono, calle, num_ext, colonia, cp)
+    VALUES (#{nombre}, #{apellido}, #{correo}, #{telefono}, #{calle}, #{num_ext}, #{colonia}, #{cp})
+  </insert>
+
+  <!-- editar -->
+  <update id="editar" parameterType="pojo.Cliente">
+    UPDATE clientes
+    SET nombre = #{nombre},
+        apellido = #{apellido},
+        correo = #{correo},
+        telefono = #{telefono},
+        calle = #{calle},
+        num_ext = #{num_ext},
+        colonia = #{colonia},
+        cp = #{cp}
+    WHERE id = #{id}
+  </update>
+
+  <!-- eliminar -->
+  <delete id="eliminar" parameterType="int">
+    DELETE FROM clientes WHERE id = #{value}
+  </delete>
+
+</mapper>
