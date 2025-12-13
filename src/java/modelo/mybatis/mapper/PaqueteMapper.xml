@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="paquete">
+
+  <select id="obtener-por-envio" parameterType="int" resultType="pojo.Paquete">
+    SELECT
+      id,
+      id_envio AS idEnvio,
+      descripcion,
+      peso,
+      alto,
+      ancho,
+      profundidad,
+      cantidad,
+      valor,
+      fecha_creacion AS fechaCreacion
+    FROM paquetes
+    WHERE id_envio = #{idEnvio}
+    ORDER BY id
+  </select>
+
+  <select id="obtener-por-id" parameterType="int" resultType="pojo.Paquete">
+    SELECT
+      id, id_envio AS idEnvio, descripcion, peso, alto, ancho, profundidad, cantidad, valor, fecha_creacion AS fechaCreacion
+    FROM paquetes
+    WHERE id = #{id}
+  </select>
+
+  <insert id="registrar" parameterType="pojo.Paquete" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO paquetes (
+      id_envio, descripcion, peso, alto, ancho, profundidad, cantidad, valor
+    ) VALUES (
+      #{idEnvio}, #{descripcion}, #{peso}, #{alto}, #{ancho}, #{profundidad}, #{cantidad}, #{valor}
+    )
+  </insert>
+
+  <update id="editar" parameterType="pojo.Paquete">
+    UPDATE paquetes
+    SET
+      id_envio = #{idEnvio},
+      descripcion = #{descripcion},
+      peso = #{peso},
+      alto = #{alto},
+      ancho = #{ancho},
+      profundidad = #{profundidad},
+      cantidad = #{cantidad},
+      valor = #{valor}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="eliminar" parameterType="int">
+    DELETE FROM paquetes WHERE id = #{id}
+  </delete>
+
+</mapper>
