@@ -1,35 +1,36 @@
+
 package modelo.mybatis;
 
-import java.io.InputStream;
+import java.io.IOException;
+import java.io.Reader;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+
 public class MyBatisUtil {
-    private static SqlSessionFactory sqlSessionFactory;
-
-    static {
+    private static final String RESOURCE = "modelo/mybatis/mybatis-config.xml";
+    private static final String ENVIROMENT = "desarrollo";
+    
+    public static SqlSession getSession(){
+     
+        SqlSession session = null;
+        
         try {
-            String resource = "modelo/mybatis/mybatis-config.xml";
-            InputStream inputStream = Resources.getResourceAsStream(resource);
-            sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream); // usa el environment por defecto del XML
-            System.out.println("MyBatis inicializado con: " + resource);
-        } catch (Exception e) {
+            Reader reader = Resources.getResourceAsReader(RESOURCE);
+            SqlSessionFactory sqlMapper = new SqlSessionFactoryBuilder().build(reader, ENVIROMENT);
+            session = sqlMapper.openSession();
+            
+        } catch (IOException e) {
             e.printStackTrace();
-            sqlSessionFactory = null;
         }
+        
+        return session;
     }
 
-    public static SqlSession getSession() {
-        if (sqlSessionFactory == null) {
-            throw new IllegalStateException("SqlSessionFactory no inicializado - revisa mybatis-config.xml y la ruta del recurso");
-        }
-        return sqlSessionFactory.openSession();
+    public static Object getSqlSessionFactory() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-    // utilidad opcional si prefieres obtener la fábrica
-    public static SqlSessionFactory getSqlSessionFactory() {
-        return sqlSessionFactory;
-    }
+    
 }

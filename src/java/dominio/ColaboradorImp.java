@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dominio;
 
 import dto.Respuesta;
@@ -20,7 +16,11 @@ public class ColaboradorImp {
     public static List<Colaborador> obtenerTodos() {
         List<Colaborador> colaboradores = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
-
+        if (colaboradores == null) {
+    System.out.println("DEBUG: ColaboradorImp.obtenerTodos -> colaboradores == null");
+} else {
+    System.out.println("DEBUG: ColaboradorImp.obtenerTodos -> size = " + colaboradores.size());
+}
         if (conexionBD != null) {
             try {
                 colaboradores = conexionBD.selectList("colaborador.obtener-todos");
@@ -181,4 +181,4 @@ public class ColaboradorImp {
 
         return colaborador;
     }
-}
+    }

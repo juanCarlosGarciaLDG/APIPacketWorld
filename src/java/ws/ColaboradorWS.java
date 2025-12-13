@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ws;
 
 import com.google.gson.Gson;
@@ -19,6 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import pojo.Colaborador;
 
 /**
@@ -28,13 +25,13 @@ import pojo.Colaborador;
 @Path("colaborador")
 public class ColaboradorWS {
 
+// reemplaza el método obtenerTodos por este (o crea uno nuevo para probar
     @Path("obtener-todos")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Colaborador> obtenerTodos() {
         return ColaboradorImp.obtenerTodos();
     }
-
     @Path("registrar")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
