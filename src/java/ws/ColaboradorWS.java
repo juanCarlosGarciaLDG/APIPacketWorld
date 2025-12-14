@@ -15,7 +15,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import pojo.Colaborador;
 
 /**
@@ -25,7 +24,6 @@ import pojo.Colaborador;
 @Path("colaborador")
 public class ColaboradorWS {
 
-// reemplaza el método obtenerTodos por este (o crea uno nuevo para probar
     @Path("obtener-todos")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
