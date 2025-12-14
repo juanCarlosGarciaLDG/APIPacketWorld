@@ -1,0 +1,1235 @@
+{
+	"info": {
+		"_postman_id": "cdb3063e-02ec-4184-89b3-09b5d969820a",
+		"name": "Packet-World",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48726245",
+		"_collection_link": "https://roberto-pargon-2308799.postman.co/workspace/Rob's-Workspace~f2a0262e-0862-4686-8403-6794823606e2/collection/48726245-cdb3063e-02ec-4184-89b3-09b5d969820a?action=share&source=collection_link&creator=48726245"
+	},
+	"item": [
+		{
+			"name": "Colaboradores",
+			"item": [
+				{
+					"name": "obtener-todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/colaborador/obtener-todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"colaborador",
+								"obtener-todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registrar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"noPersonal\": \"POSTMAN-002\",\r\n  \"curp\": \"TEST880101HDFRRA01\",\r\n  \"nombre\": \"Roberto\",\r\n  \"apellidoPaterno\": \"Pruebas\",\r\n  \"apellidoMaterno\": \"Postman\",\r\n  \"email\": \"roberto.test@empresa.com\",\r\n  \"contrasena\": \"segura123\",\r\n  \"rol\": \"Conductor\",\r\n  \"idSucursal\": 1,\r\n  \"licencia\": \"LIC-TEST-999\",\r\n  \"foto\": [], \r\n  \"activo\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/colaborador/registrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"colaborador",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idColaborador\": 5,\r\n  \"noPersonal\": \"POSTMAN-001\",\r\n  \"curp\": \"TEST880101HDFRRA05\",\r\n  \"nombre\": \"Roberto Editado\",\r\n  \"apellidoPaterno\": \"Pruebas\",\r\n  \"apellidoMaterno\": \"Cambio\",\r\n  \"email\": \"roberto.editado@empresa.com\",\r\n  \"contrasena\": \"nueva123\",\r\n  \"rol\": \"Ejecutivo de Tienda\",\r\n  \"idSucursal\": 1,\r\n  \"licencia\": null,\r\n  \"fotoBase64\": \"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==\",\r\n  \"foto\": [],\r\n  \"activo\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/colaborador/editar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"colaborador",
+								"editar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/colaborador/eliminar/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"colaborador",
+								"eliminar",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener-foto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/colaborador/obtener-foto/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"colaborador",
+								"obtener-foto",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "subir-foto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": "/C:/Users/Lenovo/Pictures/yomuyakadashi-10-04-2025-0001.jpg"
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/colaborador/subir-foto/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"colaborador",
+								"subir-foto",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Clientes",
+			"item": [
+				{
+					"name": "obtener-todos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/cliente/obtener-todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"cliente",
+								"obtener-todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registrar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"María\",\r\n    \"apellido\": \"Gómez\",\r\n    \"correo\": \"maria.gomez@email.com\",\r\n    \"telefono\": \"5551234567\",\r\n    \"calle\": \"Av. Siempre Viva\",\r\n    \"num_ext\": \"742\",\r\n    \"colonia\": \"Centro\",\r\n    \"cp\": \"91000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/cliente/registrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"cliente",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"nombre\": \"María\",\r\n    \"apellido\": \"Gómez de Pérez\",\r\n    \"correo\": \"maria.nueva@email.com\",\r\n    \"telefono\": \"5559876543\",\r\n    \"calle\": \"Av. Reforma\",\r\n    \"num_ext\": \"101\",\r\n    \"colonia\": \"Lomas\",\r\n    \"cp\": \"91020\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/cliente/editar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"cliente",
+								"editar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verificar_correo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "correo",
+									"value": "maria.a@email.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/cliente/verificar_correo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"cliente",
+								"verificar_correo"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "correo",
+									"value": "maria.a@email.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/cliente/eliminar/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"cliente",
+								"eliminar",
+								"3"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sucursales",
+			"item": [
+				{
+					"name": "obtener-todos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/sucursal/obtener-todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"sucursal",
+								"obtener-todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registrar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"codigoUnico\": \"SUC-XAL-001\",\r\n    \"nombre\": \"Sucursal Centro Xalapa\",\r\n    \"calle\": \"Calle Enríquez\",\r\n    \"numero\": \"12\",\r\n    \"colonia\": \"Centro\",\r\n    \"codigoPostal\": \"91000\",\r\n    \"ciudad\": \"Xalapa\",\r\n    \"estado\": \"Veracruz\",\r\n    \"estatus\": \"Activa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/sucursal/registrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"sucursal",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idSucursal\": 9,\r\n    \"nombre\": \"Sucursal Centro Histórico\",\r\n    \"calle\": \"Calle Enríquez\",\r\n    \"numero\": \"15-B\",\r\n    \"colonia\": \"Centro\",\r\n    \"codigoPostal\": \"91000\",\r\n    \"ciudad\": \"Xalapa\",\r\n    \"estado\": \"Veracruz\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/sucursal/editar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"sucursal",
+								"editar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cambiar-estatus",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idSucursal\": 9,\r\n    \"estatus\": \"Inactiva\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/sucursal/cambiar-estatus",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"sucursal",
+								"cambiar-estatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener-por-id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/sucursal/obtener/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"sucursal",
+								"obtener",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/sucursal/eliminar/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"sucursal",
+								"eliminar",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Envíos",
+			"item": [
+				{
+					"name": "obtener-todos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/envio/obtener-todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"envio",
+								"obtener-todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener-por-id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/envio/obtener/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"envio",
+								"obtener",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener-por-guia",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/envio/obtener-por-guia/GW-0001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"envio",
+								"obtener-por-guia",
+								"GW-0001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registrar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idCliente\": 1,\r\n    \"idSucursalOrigen\": 2,\r\n    \"numGuia\": \"GUIA-2025-001\",\r\n    \"direccionDestino\": \"Calle Reforma 222\",\r\n    \"ciudadDestino\": \"Ciudad de México\",\r\n    \"estadoDestino\": \"CDMX\",\r\n    \"destinatarioNombre\": \"Carlos López\",\r\n    \"destinatarioTelefono\": \"5551112233\",\r\n    \"costo\": 250.50,\r\n    \"peso\": 5.2,\r\n    \"estatus\": \"recibido\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/envio/registrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"envio",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 7,\r\n    \"idCliente\": 1,\r\n    \"idSucursalOrigen\":2,\r\n    \"numGuia\": \"GUIA-2025-001-CORREGIDA\",\r\n    \"direccionDestino\": \"Calle Reforma 222, Int 4\",\r\n    \"ciudadDestino\": \"Ciudad de México\",\r\n    \"estadoDestino\": \"CDMX\",\r\n    \"destinatarioNombre\": \"Carlos López Pérez\",\r\n    \"destinatarioTelefono\": \"5551112233\",\r\n    \"costo\": 250.50,\r\n    \"peso\": 5.2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/envio/editar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"envio",
+								"editar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cambiar-estatus",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 7,\r\n    \"estatus\": \"en_transito\",\r\n    \"idColaboradorActualizo\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/envio/cambiar-estatus",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"envio",
+								"cambiar-estatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/envio/eliminar/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"envio",
+								"eliminar",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Paquetes",
+			"item": [
+				{
+					"name": "obtener-por-envio",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/paquete/obtener-por-envio/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"paquete",
+								"obtener-por-envio",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/paquete/obtener/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"paquete",
+								"obtener",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registrar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idEnvio\": 1,\r\n    \"descripcion\": \"Caja con libros\",\r\n    \"peso\": 2.5,\r\n    \"alto\": 30.0,\r\n    \"ancho\": 20.0,\r\n    \"profundidad\": 15.0,\r\n    \"cantidad\": 1,\r\n    \"valor\": 500.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/paquete/registrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"paquete",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 7,\r\n    \"idEnvio\": 1,\r\n    \"descripcion\": \"Caja con libros y documentos\",\r\n    \"peso\": 2.8,\r\n    \"alto\": 30.0,\r\n    \"ancho\": 20.0,\r\n    \"profundidad\": 15.0,\r\n    \"cantidad\": 1,\r\n    \"valor\": 550.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/paquete/editar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"paquete",
+								"editar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/paquete/eliminar/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"paquete",
+								"eliminar",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Asignar-Conductor",
+			"item": [
+				{
+					"name": "obtener",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/conductor-asignacion/obtener/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"conductor-asignacion",
+								"obtener",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "asignar-vehiculo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"vehiculoId\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/conductor-asignacion/asignar-vehiculo/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"conductor-asignacion",
+								"asignar-vehiculo",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "desasignar-vehiculo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/conductor-asignacion/desasignar-vehiculo/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"conductor-asignacion",
+								"desasignar-vehiculo",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "asignar-envio",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"envioId\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/conductor-asignacion/asignar-envio/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"conductor-asignacion",
+								"asignar-envio",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "desasignar-envio",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/conductor-asignacion/desasignar-envio/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"conductor-asignacion",
+								"desasignar-envio",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vehículos",
+			"item": [
+				{
+					"name": "obtener-todos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/vehiculo/obtener-todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"vehiculo",
+								"obtener-todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/vehiculo/buscar/20200000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"vehiculo",
+								"buscar",
+								"20200000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registrar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"marca\": \"Nissan\",\r\n    \"modelo\": \"Leaf\",\r\n    \"anio\": 2024,\r\n    \"vin\": \"3N1AZ0CP8KL456789\",\r\n    \"tipoUnidad\": \"Eléctrica\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/vehiculo/registrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"vehiculo",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editar",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 6,\r\n    \"marca\": \"Toyota\",\r\n    \"modelo\": \"Prius Premium\",\r\n    \"anio\": 2025,\r\n    \"tipoUnidad\": \"Híbrida\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/vehiculo/editar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"vehiculo",
+								"editar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "baja-vehiculo",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 6,\r\n    \"motivoBaja\": \"No enciende\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/vehiculo/baja-vehiculo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"vehiculo",
+								"baja-vehiculo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

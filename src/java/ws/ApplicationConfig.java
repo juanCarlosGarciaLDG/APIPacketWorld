@@ -20,6 +20,7 @@ public class ApplicationConfig extends javax.ws.rs.core.Application {
         resources.add(ws.EnvioWS.class);
         resources.add(ws.PaqueteWS.class);
         resources.add(ws.SucursalWS.class);
+        resources.add(ws.VehiculoWS.class);
     }
     
 }

@@ -17,10 +17,10 @@ public class ColaboradorImp {
         List<Colaborador> colaboradores = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (colaboradores == null) {
-    System.out.println("DEBUG: ColaboradorImp.obtenerTodos -> colaboradores == null");
-} else {
-    System.out.println("DEBUG: ColaboradorImp.obtenerTodos -> size = " + colaboradores.size());
-}
+            System.out.println("DEBUG: ColaboradorImp.obtenerTodos -> colaboradores == null");
+        } else {
+            System.out.println("DEBUG: ColaboradorImp.obtenerTodos -> size = " + colaboradores.size());
+        }
         if (conexionBD != null) {
             try {
                 colaboradores = conexionBD.selectList("colaborador.obtener-todos");
@@ -181,4 +181,4 @@ public class ColaboradorImp {
 
         return colaborador;
     }
-    }
+}
