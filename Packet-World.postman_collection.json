@@ -39,7 +39,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"noPersonal\": \"POSTMAN-002\",\r\n  \"curp\": \"TEST880101HDFRRA01\",\r\n  \"nombre\": \"Roberto\",\r\n  \"apellidoPaterno\": \"Pruebas\",\r\n  \"apellidoMaterno\": \"Postman\",\r\n  \"email\": \"roberto.test@empresa.com\",\r\n  \"contrasena\": \"segura123\",\r\n  \"rol\": \"Conductor\",\r\n  \"idSucursal\": 1,\r\n  \"licencia\": \"LIC-TEST-999\",\r\n  \"foto\": [], \r\n  \"activo\": true\r\n}",
+							"raw": "{\r\n  \"noPersonal\": \"POSTMAN-002\",\r\n  \"curp\": \"TEST880101HDFRRA01\",\r\n  \"nombre\": \"Roberto\",\r\n  \"apellidoPaterno\": \"Pruebas\",\r\n  \"apellidoMaterno\": \"Postman\",\r\n  \"email\": \"roberto.test@empresa.com\",\r\n  \"contrasena\": \"segura123\",\r\n  \"rol\": \"Conductor\",\r\n  \"idSucursal\": 2,\r\n  \"licencia\": \"LIC-TEST-999\",\r\n  \"foto\": [], \r\n  \"activo\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -923,7 +923,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/APIPacketWorld/api/conductor-asignacion/obtener/2",
+							"raw": "http://localhost:8080/APIPacketWorld/api/conductor-asignacion/obtener/12",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -934,7 +934,7 @@
 								"api",
 								"conductor-asignacion",
 								"obtener",
-								"2"
+								"12"
 							]
 						}
 					},
@@ -950,7 +950,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"vehiculoId\": 2\r\n}",
+							"raw": "{\r\n    \"vehiculoId\": 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1224,6 +1224,57 @@
 								"api",
 								"vehiculo",
 								"baja-vehiculo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener-por-id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/vehiculo/obtener/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"vehiculo",
+								"obtener",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener-disponibles",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/APIPacketWorld/api/vehiculo/obtener-disponibles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"APIPacketWorld",
+								"api",
+								"vehiculo",
+								"obtener-disponibles"
 							]
 						}
 					},

@@ -33,6 +33,37 @@ public class VehiculoImp {
         return lista;
     }
 
+    public static List<Vehiculo> obtenerDisponibles() {
+        List<Vehiculo> lista = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList("vehiculo.obtener-disponibles");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return lista;
+    }
+
+    public static Vehiculo obtenerPorId(int idVehiculo) {
+        Vehiculo vehiculo = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+
+        if (conexionBD != null) {
+            try {
+                vehiculo = conexionBD.selectOne("vehiculo.obtener-por-id", idVehiculo);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return vehiculo;
+    }
+
     public static List<Vehiculo> buscar(String filtro) {
         List<Vehiculo> lista = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
