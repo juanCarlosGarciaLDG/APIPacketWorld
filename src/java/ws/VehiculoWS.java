@@ -33,7 +33,29 @@ public class VehiculoWS {
     public List<Vehiculo> obtenerTodos() {
         return VehiculoImp.obtenerTodos();
     }
-    
+
+    @Path("obtener-disponibles")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Vehiculo> obtenerDisponibles() {
+        return VehiculoImp.obtenerDisponibles();
+    }
+
+    @Path("obtener/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Vehiculo obtenerPorId(@PathParam("id") Integer id) {
+        if (id != null && id > 0) {
+            Vehiculo v = VehiculoImp.obtenerPorId(id);
+            if (v != null) {
+                return v;
+            }
+            throw new javax.ws.rs.NotFoundException();
+        } else {
+            throw new BadRequestException("ID inválido");
+        }
+    }
+
     @Path("buscar/{filtro}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)

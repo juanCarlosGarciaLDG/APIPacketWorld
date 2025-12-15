@@ -1,4 +1,3 @@
-
 package pojo;
 
 /**
@@ -17,6 +16,7 @@ public class Colaborador {
     private String contrasena;
     private String rol;
     private Integer idSucursal;
+    private String sucursal;
     private String licencia;
     private byte[] foto;
     private String fotoBase64;
@@ -25,7 +25,7 @@ public class Colaborador {
     public Colaborador() {
     }
 
-    public Colaborador(Integer idColaborador, String noPersonal, String curp, String nombre, String apellidoPaterno, String apellidoMaterno, String email, String contrasena, String rol, Integer idSucursal, String licencia, byte[] foto, String fotoBase64, Boolean activo) {
+    public Colaborador(Integer idColaborador, String noPersonal, String curp, String nombre, String apellidoPaterno, String apellidoMaterno, String email, String contrasena, String rol, Integer idSucursal, String sucursal, String licencia, byte[] foto, String fotoBase64, Boolean activo) {
         this.idColaborador = idColaborador;
         this.noPersonal = noPersonal;
         this.curp = curp;
@@ -36,10 +36,19 @@ public class Colaborador {
         this.contrasena = contrasena;
         this.rol = rol;
         this.idSucursal = idSucursal;
+        this.sucursal = sucursal;
         this.licencia = licencia;
         this.foto = foto;
         this.fotoBase64 = fotoBase64;
         this.activo = activo;
+    }
+
+    public String getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(String sucursal) {
+        this.sucursal = sucursal;
     }
 
     public Integer getIdColaborador() {
