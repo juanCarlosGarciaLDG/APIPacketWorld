@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="vehiculo">
+
+    <resultMap id="VehiculoResultMap" type="pojo.Vehiculo">
+        <id property="id" column="id" />
+        <result property="marca" column="marca"/>
+        <result property="modelo" column="modelo"/>
+        <result property="anio" column="anio"/>
+        <result property="vin" column="vin"/>
+        <result property="tipoUnidad" column="tipo_unidad"/>
+        <result property="nii" column="nii"/>
+        <result property="activo" column="activo"/> 
+        <result property="motivoBaja" column="motivo_baja"/>
+        <result property="fechaCreacion" column="fecha_creacion"/>
+    </resultMap>
+
+    <select id="obtener-todos" resultMap="VehiculoResultMap">
+        SELECT * FROM vehiculos ORDER BY marca, modelo
+    </select>
+  
+    <select id="obtener-disponibles" resultType="pojo.Vehiculo">
+        SELECT v.* FROM vehiculos v
+        LEFT JOIN conductor_asignacion ca ON v.id = ca.vehiculo_id
+        WHERE ca.vehiculo_id IS NULL 
+        AND v.activo = 1
+    </select>
+
+
+    <select id="buscar" parameterType="string" resultMap="VehiculoResultMap">
+        SELECT * FROM vehiculos
+        WHERE vin LIKE CONCAT('%', #{valor}, '%')
+        OR marca LIKE CONCAT('%', #{valor}, '%')
+        OR nii LIKE CONCAT('%', #{valor}, '%')
+    </select>
+  
+    <select id="obtener-por-id" parameterType="int" resultMap="VehiculoResultMap">
+        SELECT * FROM vehiculos WHERE id = #{id}
+    </select>
+
+    <insert id="registrar" parameterType="pojo.Vehiculo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO vehiculos (marca, modelo, anio, vin, tipo_unidad, nii, activo)
+        VALUES (#{marca}, #{modelo}, #{anio}, #{vin}, #{tipoUnidad}, #{nii}, 1)
+    </insert>
+
+    <update id="editar" parameterType="pojo.Vehiculo">
+        UPDATE vehiculos
+        SET marca = #{marca},
+        modelo = #{modelo},
+        anio = #{anio},
+        tipo_unidad = #{tipoUnidad},
+        nii = #{nii}
+        WHERE id = #{id}
+    </update>
+
+    <update id="dar-baja" parameterType="map">
+        UPDATE vehiculos
+        SET activo = 0,
+        motivo_baja = #{motivo}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

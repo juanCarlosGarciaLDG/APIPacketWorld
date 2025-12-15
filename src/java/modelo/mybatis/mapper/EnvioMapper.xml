@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="envio">
+
+  <select id="obtener-todos" resultType="pojo.Envio">
+    SELECT
+      id,
+      id_cliente AS idCliente,
+      num_guia AS numGuia,
+      direccion_destino AS direccionDestino,
+      ciudad_destino AS ciudadDestino,
+      estado_destino AS estadoDestino,
+      id_sucursal_origen AS idSucursalOrigen,
+      costo,
+      estatus,
+      fecha_creacion AS fechaCreacion,
+      destinatario_nombre AS destinatarioNombre,
+      destinatario_telefono AS destinatarioTelefono,
+      peso,
+      fecha_actualizacion AS fechaActualizacion,
+      id_colaborador_actualizo AS idColaboradorActualizo
+    FROM envios
+    ORDER BY fecha_creacion DESC
+  </select>
+
+  <select id="obtener-por-id" parameterType="int" resultType="pojo.Envio">
+    SELECT * FROM envios WHERE id = #{id}
+  </select>
+
+  <select id="obtener-por-guia" parameterType="string" resultType="pojo.Envio">
+    SELECT * FROM envios WHERE num_guia = #{numGuia}
+  </select>
+
+  <insert id="registrar" parameterType="pojo.Envio" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO envios (
+      id_cliente, num_guia, direccion_destino, ciudad_destino, estado_destino,
+      id_sucursal_origen, costo, estatus, destinatario_nombre, destinatario_telefono, peso
+    ) VALUES (
+      #{idCliente}, #{numGuia}, #{direccionDestino}, #{ciudadDestino}, #{estadoDestino},
+      #{idSucursalOrigen}, #{costo}, #{estatus}, #{destinatarioNombre}, #{destinatarioTelefono}, #{peso}
+    )
+  </insert>
+
+  <update id="actualizar-guia" parameterType="pojo.Envio">
+    UPDATE envios
+    SET num_guia = #{numGuia}
+    WHERE id = #{id}
+  </update>
+
+  <update id="editar" parameterType="pojo.Envio">
+    UPDATE envios
+    SET
+      id_cliente = #{idCliente},
+      num_guia = #{numGuia},
+      direccion_destino = #{direccionDestino},
+      ciudad_destino = #{ciudadDestino},
+      estado_destino = #{estadoDestino},
+      id_sucursal_origen = #{idSucursalOrigen},
+      costo = #{costo},
+      destinatario_nombre = #{destinatarioNombre},
+      destinatario_telefono = #{destinatarioTelefono},
+      peso = #{peso}
+    WHERE id = #{id}
+  </update>
+
+  <update id="cambiar-estatus" parameterType="pojo.Envio">
+    UPDATE envios
+    SET estatus = #{estatus},
+        id_colaborador_actualizo = #{idColaboradorActualizo},
+        fecha_actualizacion = NOW()
+    WHERE id = #{id}
+  </update>
+
+  <delete id="eliminar" parameterType="int">
+    DELETE FROM envios WHERE id = #{id}
+  </delete>
+
+</mapper>

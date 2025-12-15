@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sucursal">
+
+  <select id="obtener-todos" resultType="pojo.Sucursal">
+    SELECT
+      id_sucursal AS idSucursal,
+      codigo_unico AS codigoUnico,
+      nombre,
+      calle,
+      numero,
+      colonia,
+      codigo_postal AS codigoPostal,
+      ciudad,
+      estado,
+      estatus,
+      fecha_creacion AS fechaCreacion
+    FROM sucursales
+    ORDER BY nombre
+  </select>
+
+  <select id="obtener-por-id" parameterType="int" resultType="pojo.Sucursal">
+    SELECT
+      id_sucursal AS idSucursal,
+      codigo_unico AS codigoUnico,
+      nombre,
+      calle,
+      numero,
+      colonia,
+      codigo_postal AS codigoPostal,
+      ciudad,
+      estado,
+      estatus,
+      fecha_creacion AS fechaCreacion
+    FROM sucursales
+    WHERE id_sucursal = #{idSucursal}
+  </select>
+
+  <insert id="registrar" parameterType="pojo.Sucursal" useGeneratedKeys="true" keyProperty="idSucursal">
+    INSERT INTO sucursales (
+      codigo_unico, nombre, calle, numero, colonia, codigo_postal,
+      ciudad, estado, estatus
+    ) VALUES (
+      #{codigoUnico}, #{nombre}, #{calle}, #{numero}, #{colonia}, #{codigoPostal},
+      #{ciudad}, #{estado}, #{estatus}
+    )
+  </insert>
+
+  <!-- editar: NO permite editar codigo_unico ni estatus -->
+  <update id="editar" parameterType="pojo.Sucursal">
+    UPDATE sucursales
+    SET
+      nombre = #{nombre},
+      calle = #{calle},
+      numero = #{numero},
+      colonia = #{colonia},
+      codigo_postal = #{codigoPostal},
+      ciudad = #{ciudad},
+      estado = #{estado}
+    WHERE id_sucursal = #{idSucursal}
+  </update>
+
+  <!-- dar-baja: marca estatus = 'Inactiva' -->
+   <update id="cambiar-estatus" parameterType="pojo.Sucursal">
+    UPDATE sucursales
+    SET estatus = #{estatus}
+    WHERE id_sucursal = #{idSucursal}
+  </update>
+
+  <delete id="eliminar" parameterType="int">
+    DELETE FROM sucursales WHERE id_sucursal = #{idSucursal}
+  </delete>
+
+</mapper>
