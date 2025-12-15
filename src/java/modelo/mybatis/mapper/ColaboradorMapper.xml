@@ -7,18 +7,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="obtener-todos" resultType="pojo.Colaborador">
         SELECT 
-        id_colaborador AS idColaborador,
-        no_personal AS noPersonal,
-        curp,
-        nombre, 
-        apellido_paterno AS apellidoPaterno, 
-        apellido_materno AS apellidoMaterno, 
-        email, 
-        rol, 
-        id_sucursal AS idSucursal,
-        licencia,
-        activo
-        FROM colaboradores
+        c.id_colaborador AS idColaborador,
+        c.no_personal AS noPersonal,
+        c.curp,
+        c.nombre, 
+        c.apellido_paterno AS apellidoPaterno, 
+        c.apellido_materno AS apellidoMaterno, 
+        c.email, 
+        c.rol, 
+        c.id_sucursal AS idSucursal,
+        s.nombre AS sucursal,  c.licencia,
+        c.activo
+        FROM colaboradores c
+        INNER JOIN sucursales s ON c.id_sucursal = s.id_sucursal
+        ORDER BY c.apellido_paterno
     </select>
     
     <insert id="registrar" parameterType="pojo.Colaborador"> 

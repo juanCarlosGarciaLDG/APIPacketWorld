@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <environments default="desarrollo">
+        <environment id="desarrollo">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/packet_world?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+                <!-- opcionales -->
+                <property name="poolMaximumActiveConnections" value="10"/>
+                <property name="poolMaximumIdleConnections" value="5"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <!-- registra aquí tus mappers -->
+        <mapper resource="modelo/mybatis/mapper/ClienteMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/ColaboradorMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/EnvioMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/PaqueteMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/SucursalMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/VehiculoMapper.xml"/>
+        <mapper resource="modelo/mybatis/mapper/ConductorAsignacionMapper.xml"/>
+    </mappers>
+</configuration>

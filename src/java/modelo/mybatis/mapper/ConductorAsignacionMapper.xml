@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="conductorAsignacion">
+
+  <select id="obtenerPorConductor" parameterType="int" resultType="pojo.ConductorAsignacion">
+    SELECT
+      conductor_id AS conductorId,
+      vehiculo_id AS vehiculoId,
+      envio_id AS envioId,
+      fecha_creacion AS fechaCreacion,
+      fecha_actualizacion AS fechaActualizacion
+    FROM conductor_asignacion
+    WHERE conductor_id = #{conductorId}
+  </select>
+
+  <!-- Inserta o actualiza la fila de asignación (crea si no existe) -->
+  <insert id="insertOrUpdate" parameterType="pojo.ConductorAsignacion">
+  INSERT INTO conductor_asignacion (conductor_id, vehiculo_id, envio_id)
+  VALUES (#{conductorId}, #{vehiculoId}, #{envioId})
+  ON DUPLICATE KEY UPDATE
+    vehiculo_id = COALESCE(VALUES(vehiculo_id), vehiculo_id),
+    envio_id   = COALESCE(VALUES(envio_id), envio_id)
+</insert>
+
+  <update id="updateVehiculo" parameterType="map">
+    UPDATE conductor_asignacion
+    SET vehiculo_id = #{vehiculoId}
+    WHERE conductor_id = #{conductorId}
+  </update>
+
+  <update id="updateEnvio" parameterType="map">
+    UPDATE conductor_asignacion
+    SET envio_id = #{envioId}
+    WHERE conductor_id = #{conductorId}
+  </update>
+
+  <update id="desasignarVehiculo" parameterType="int">
+    UPDATE conductor_asignacion SET vehiculo_id = NULL WHERE conductor_id = #{conductorId}
+  </update>
+
+  <update id="desasignarEnvio" parameterType="int">
+    UPDATE conductor_asignacion SET envio_id = NULL WHERE conductor_id = #{conductorId}
+  </update>
+
+  <select id="buscarPorVehiculo" parameterType="int" resultType="int">
+    SELECT conductor_id FROM conductor_asignacion WHERE vehiculo_id = #{vehiculoId}
+  </select>
+
+  <select id="buscarPorEnvio" parameterType="int" resultType="int">
+    SELECT conductor_id FROM conductor_asignacion WHERE envio_id = #{envioId}
+  </select>
+
+</mapper>
