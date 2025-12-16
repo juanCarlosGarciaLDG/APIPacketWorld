@@ -105,8 +105,8 @@ public class VehiculoWS {
         Gson gson = new Gson();
         try {
             Vehiculo v = gson.fromJson(json, Vehiculo.class);
-            if (v.getId() == null || v.getMotivoBaja() == null) {
-                throw new BadRequestException("ID y Motivo son obligatorios");
+            if (v.getId() == null || v.getMotivoBaja() == null || v.getMotivoBaja().trim().isEmpty()) {
+                throw new BadRequestException("El ID y el motivo son obligatorios.");
             }
             return VehiculoImp.darBaja(v.getId(), v.getMotivoBaja());
         } catch (JsonSyntaxException e) {

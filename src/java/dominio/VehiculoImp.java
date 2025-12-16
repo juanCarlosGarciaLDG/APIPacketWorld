@@ -82,19 +82,22 @@ public class VehiculoImp {
     public static Respuesta registrar(Vehiculo vehiculo) {
         Respuesta respuesta = new Respuesta();
         SqlSession conexionBD = MyBatisUtil.getSession();
+        
         if (conexionBD != null) {
             try {
-
+                // Validación de tipo de unidad
                 if (!validarTipoUnidad(vehiculo.getTipoUnidad())) {
                     respuesta.setError(true);
                     respuesta.setMensaje("Tipo de unidad inválido. Valores permitidos: Gasolina, Diesel, Eléctrica, Híbrida");
                     return respuesta;
                 }
+                
                 String nii = generarNII(vehiculo.getAnio(), vehiculo.getVin());
                 vehiculo.setNii(nii);
 
                 int filas = conexionBD.insert("vehiculo.registrar", vehiculo);
                 conexionBD.commit();
+                
                 if (filas > 0) {
                     respuesta.setError(false);
                     respuesta.setMensaje("Vehículo registrado. NII asignado: " + nii);
@@ -102,9 +105,22 @@ public class VehiculoImp {
                     respuesta.setError(true);
                     respuesta.setMensaje("No se pudo registrar el vehículo.");
                 }
+                
             } catch (Exception e) {
                 respuesta.setError(true);
-                respuesta.setMensaje("Error al registrar: " + e.getMessage());
+                
+                String errorMsg = e.getMessage();
+                
+                if (errorMsg != null && errorMsg.contains("Duplicate entry")) {
+                    if (errorMsg.contains("vin_UNIQUE")) {
+                        respuesta.setMensaje("El VIN ingresado ya se encuentra registrado en el sistema.");
+                    } else {
+                        respuesta.setMensaje("Error: Intentas registrar un dato duplicado.");
+                    }
+                } else {
+                    respuesta.setMensaje("Error al registrar: " + errorMsg);
+                }
+                
             } finally {
                 conexionBD.close();
             }
@@ -164,12 +180,13 @@ public class VehiculoImp {
 
                 int filas = conexionBD.update("vehiculo.dar-baja", params);
                 conexionBD.commit();
+                
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Vehículo dado de baja.");
+                    respuesta.setMensaje("Vehículo dado de baja correctamente.");
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró el vehículo.");
+                    respuesta.setMensaje("El vehículo no existe o ya estaba inactivo.");
                 }
             } catch (Exception e) {
                 respuesta.setError(true);
