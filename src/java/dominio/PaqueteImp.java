@@ -1,12 +1,32 @@
 package dominio;
 
 import dto.Respuesta;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import javax.sql.DataSource;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
 import pojo.Paquete;
 
 public class PaqueteImp {
+    // En dominio.PaqueteImp (backend)
+public static List<Paquete> obtenerTodos() {
+        List<Paquete> lista = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                lista = conexionBD.selectList("paquete.obtener-todos");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return lista;
+    }
 
     public static List<Paquete> obtenerPorEnvio(int idEnvio) {
         List<Paquete> lista = null;

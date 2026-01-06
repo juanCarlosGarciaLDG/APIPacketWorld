@@ -51,5 +51,7 @@
   <select id="buscarPorEnvio" parameterType="int" resultType="int">
     SELECT conductor_id FROM conductor_asignacion WHERE envio_id = #{envioId}
   </select>
-
+<delete id="deleteByEnvio" parameterType="int">
+  DELETE FROM conductor_asignacion WHERE envio_id = #{envioId}
+</delete>
 </mapper>

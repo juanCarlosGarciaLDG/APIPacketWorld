@@ -78,4 +78,24 @@
     DELETE FROM envios WHERE id = #{id}
   </delete>
 
+ <!-- Devuelve id del envío que actualmente tiene asignado al conductor (si existe) -->
+  <select id="findEnvioByConductor" parameterType="int" resultType="int" >
+    SELECT id FROM envios WHERE id_colaborador_actualizo = #{conductorId} LIMIT 1
+  </select>
+
+  <!-- Actualiza el envío para guardar el id del colaborador que lo actualizó/asignó -->
+  <update id="updateEnvioSetColaborador" parameterType="map">
+    UPDATE envios
+    SET id_colaborador_actualizo = #{conductorId},
+        fecha_actualizacion = NOW()
+    WHERE id = #{envioId}
+  </update>
+
+  <!-- Quitar asignación -->
+  <update id="clearEnvioColaborador" parameterType="int">
+    UPDATE envios
+    SET id_colaborador_actualizo = NULL,
+        fecha_actualizacion = NOW()
+    WHERE id = #{envioId}
+  </update>
 </mapper>

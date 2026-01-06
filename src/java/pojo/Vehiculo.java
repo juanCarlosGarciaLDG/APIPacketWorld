@@ -9,7 +9,7 @@ package pojo;
  * @author Lenovo
  */
 public class Vehiculo {
-
+    private String placa;
     private Integer id;
     private String marca;
     private String modelo;
@@ -22,6 +22,9 @@ public class Vehiculo {
     private String fechaCreacion;
 
     public Vehiculo() {
+    }
+    public String getPlaca() {
+        return placa;
     }
 
     public Integer getId() {

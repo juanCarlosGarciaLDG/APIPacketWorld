@@ -4,7 +4,22 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="paquete">
-
+    <!-- Obtener todos los paquetes -->
+<select id="obtener-todos" resultType="pojo.Paquete">
+  SELECT
+    id,
+    id_envio AS idEnvio,
+    descripcion,
+    peso,
+    alto,
+    ancho,
+    profundidad,
+    cantidad,
+    valor,
+    fecha_creacion AS fechaCreacion
+  FROM paquetes
+  ORDER BY fecha_creacion DESC
+</select>
   <select id="obtener-por-envio" parameterType="int" resultType="pojo.Paquete">
     SELECT
       id,
