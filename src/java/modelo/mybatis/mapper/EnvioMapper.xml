@@ -5,8 +5,7 @@
 
 <mapper namespace="envio">
 
-  <select id="obtener-todos" resultType="pojo.Envio">
-    SELECT
+  <sql id="columnasEnvio">
       id,
       id_cliente AS idCliente,
       num_guia AS numGuia,
@@ -22,25 +21,33 @@
       peso,
       fecha_actualizacion AS fechaActualizacion,
       id_colaborador_actualizo AS idColaboradorActualizo
+  </sql>
+
+  <select id="obtener-todos" resultType="pojo.Envio">
+    SELECT <include refid="columnasEnvio"/>
     FROM envios
     ORDER BY fecha_creacion DESC
   </select>
 
   <select id="obtener-por-id" parameterType="int" resultType="pojo.Envio">
-    SELECT * FROM envios WHERE id = #{id}
+    SELECT <include refid="columnasEnvio"/>
+    FROM envios
+    WHERE id = #{id}
   </select>
 
   <select id="obtener-por-guia" parameterType="string" resultType="pojo.Envio">
-    SELECT * FROM envios WHERE num_guia = #{numGuia}
+    SELECT <include refid="columnasEnvio"/>
+    FROM envios
+    WHERE num_guia = #{numGuia}
   </select>
 
   <insert id="registrar" parameterType="pojo.Envio" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO envios (
       id_cliente, num_guia, direccion_destino, ciudad_destino, estado_destino,
-      id_sucursal_origen, costo, estatus, destinatario_nombre, destinatario_telefono, peso
+      id_sucursal_origen, costo, estatus, destinatario_nombre, destinatario_telefono, peso, id_colaborador_actualizo
     ) VALUES (
       #{idCliente}, #{numGuia}, #{direccionDestino}, #{ciudadDestino}, #{estadoDestino},
-      #{idSucursalOrigen}, #{costo}, #{estatus}, #{destinatarioNombre}, #{destinatarioTelefono}, #{peso}
+      #{idSucursalOrigen}, #{costo}, #{estatus}, #{destinatarioNombre}, #{destinatarioTelefono}, #{peso}, #{idColaboradorActualizo}
     )
   </insert>
 
@@ -60,9 +67,12 @@
       estado_destino = #{estadoDestino},
       id_sucursal_origen = #{idSucursalOrigen},
       costo = #{costo},
+      estatus = #{estatus},
       destinatario_nombre = #{destinatarioNombre},
       destinatario_telefono = #{destinatarioTelefono},
-      peso = #{peso}
+      peso = #{peso},
+      id_colaborador_actualizo = #{idColaboradorActualizo},
+      fecha_actualizacion = NOW()
     WHERE id = #{id}
   </update>
 
@@ -78,12 +88,10 @@
     DELETE FROM envios WHERE id = #{id}
   </delete>
 
- <!-- Devuelve id del envío que actualmente tiene asignado al conductor (si existe) -->
   <select id="findEnvioByConductor" parameterType="int" resultType="int" >
     SELECT id FROM envios WHERE id_colaborador_actualizo = #{conductorId} LIMIT 1
   </select>
 
-  <!-- Actualiza el envío para guardar el id del colaborador que lo actualizó/asignó -->
   <update id="updateEnvioSetColaborador" parameterType="map">
     UPDATE envios
     SET id_colaborador_actualizo = #{conductorId},
@@ -91,11 +99,11 @@
     WHERE id = #{envioId}
   </update>
 
-  <!-- Quitar asignación -->
   <update id="clearEnvioColaborador" parameterType="int">
     UPDATE envios
     SET id_colaborador_actualizo = NULL,
         fecha_actualizacion = NOW()
     WHERE id = #{envioId}
   </update>
+
 </mapper>

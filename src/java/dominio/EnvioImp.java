@@ -5,13 +5,14 @@ import dto.DistanciaRespuesta;
 import dto.Respuesta;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.List;
-import java.net.URL;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 import modelo.mybatis.MyBatisUtil;
 import org.apache.ibatis.session.SqlSession;
-import pojo.Envio;
 import pojo.Cliente;
+import pojo.Envio;
 import pojo.Paquete;
 import pojo.Sucursal;
 
@@ -21,13 +22,8 @@ public class EnvioImp {
         List<Envio> lista = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
-            try {
-                lista = conexionBD.selectList("envio.obtener-todos");
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                conexionBD.close();
-            }
+            try { lista = conexionBD.selectList("envio.obtener-todos"); } 
+            catch (Exception e) { e.printStackTrace(); } finally { conexionBD.close(); }
         }
         return lista;
     }
@@ -36,13 +32,8 @@ public class EnvioImp {
         Envio envio = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
-            try {
-                envio = conexionBD.selectOne("envio.obtener-por-id", id);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                conexionBD.close();
-            }
+            try { envio = conexionBD.selectOne("envio.obtener-por-id", id); } 
+            catch (Exception e) { e.printStackTrace(); } finally { conexionBD.close(); }
         }
         return envio;
     }
@@ -51,201 +42,162 @@ public class EnvioImp {
         Envio envio = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
-            try {
-                envio = conexionBD.selectOne("envio.obtener-por-guia", numGuia);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                conexionBD.close();
-            }
+            try { envio = conexionBD.selectOne("envio.obtener-por-guia", numGuia); } 
+            catch (Exception e) { e.printStackTrace(); } finally { conexionBD.close(); }
         }
         return envio;
     }
 
-   public static Respuesta registrar(Envio envio, List<Paquete> paquetes) {
+    public static Respuesta registrar(Envio envio, List<Paquete> paquetes) {
         Respuesta respuesta = new Respuesta();
         
         if (envio.getIdSucursalOrigen() == null || envio.getIdCliente() == null) {
-             respuesta.setError(true);
-             respuesta.setMensaje("Faltan datos: Se requiere Sucursal de Origen y Cliente.");
-             return respuesta;
+             return new Respuesta(true, "Faltan datos: Sucursal Origen o Cliente.");
         }
 
-        Sucursal sucursalOrigen = SucursalImp.obtenerPorId(envio.getIdSucursalOrigen());
-        
-        if (sucursalOrigen == null || sucursalOrigen.getCodigoPostal() == null) {
-            respuesta.setError(true);
-            respuesta.setMensaje("La sucursal de origen no tiene un Código Postal configurado.");
-            return respuesta;
-        }
-        String cpOrigen = sucursalOrigen.getCodigoPostal();
+        Sucursal sucursal = SucursalImp.obtenerPorId(envio.getIdSucursalOrigen());
+        Cliente cliente = ClienteImp.obtenerPorId(envio.getIdCliente());
 
-        Cliente clienteDestino = ClienteImp.obtenerPorId(envio.getIdCliente());
-        
-        if (clienteDestino == null) {
-            respuesta.setError(true);
-            respuesta.setMensaje("El cliente especificado no existe.");
-            return respuesta;
+        if (sucursal == null || cliente == null || 
+            sucursal.getCodigoPostal() == null || cliente.getCp() == null) {
+            return new Respuesta(true, "Faltan códigos postales en sucursal o cliente.");
         }
-        
-        if (clienteDestino.getCp()== null || clienteDestino.getCp().isEmpty()) {
-            respuesta.setError(true);
-            respuesta.setMensaje("El cliente destinatario no tiene Código Postal registrado. No se puede calcular el costo.");
-            return respuesta;
-        }
-        
-        String cpDestino = clienteDestino.getCp();
 
-        Double distancia = obtenerDistanciaWS(cpOrigen, cpDestino);
-        
+        Double distancia = obtenerDistanciaWS(sucursal.getCodigoPostal(), cliente.getCp());
         if (distancia == null) {
-            respuesta.setError(true);
-            respuesta.setMensaje("No se pudo calcular la distancia entre CP Origen: " + cpOrigen + " y CP Destino: " + cpDestino);
-            return respuesta;
+            return new Respuesta(true, "No se pudo calcular la distancia con la API externa.");
         }
 
-        double costoTotal = calcularCostoEnvio(distancia, paquetes.size());
-        envio.setCosto(costoTotal); 
+        int cantidadTotalPaquetes = 0;
+        double pesoTotalDouble = 0.0;
+
+        if (paquetes != null) {
+            for (Paquete p : paquetes) {
+                int q = (p.getCantidad() != null && p.getCantidad() > 0) ? p.getCantidad() : 1;
+                cantidadTotalPaquetes += q;
+                double pesoUnitario = (p.getPeso() != null) ? p.getPeso().doubleValue() : 0.0;
+                pesoTotalDouble += (pesoUnitario * q);
+            }
+        }
+        if (cantidadTotalPaquetes == 0) cantidadTotalPaquetes = 1;
+
+        double costoTotal = calcularCostoLogica(distancia, cantidadTotalPaquetes);
+        
+        envio.setCosto(costoTotal);
+        envio.setPeso(new BigDecimal(pesoTotalDouble));
 
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
             try {
-                int filasAfectadas = conexionBD.insert("envio.registrar", envio);
+                int filas = conexionBD.insert("envio.registrar", envio);
                 
-                for(Paquete p : paquetes){
-                    p.setIdEnvio(envio.getId());
-                    conexionBD.insert("paquete.registrar", p);
-                }
-
-                conexionBD.commit();
-                if (filasAfectadas > 0) {
-                    respuesta.setError(false);
-                    respuesta.setMensaje("Envío registrado correctamente. Distancia: " + distancia + " km. Costo total: $" + costoTotal);
-                } else {
-                    respuesta.setError(true);
-                    respuesta.setMensaje("No se pudo registrar la información del envío en la BD.");
-                }
-            } catch (Exception e) {
-                respuesta.setError(true);
-                respuesta.setMensaje("Error al guardar en base de datos: " + e.getMessage());
-            } finally {
-                conexionBD.close();
-            }
-        } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("Error de conexión con la base de datos.");
-        }
-
-        return respuesta;
-    }
-    
-
-    public static Respuesta editar(Envio envio) {
-        Respuesta respuesta = new Respuesta();
-        SqlSession conexionBD = MyBatisUtil.getSession();
-        if (envio == null || envio.getId() == null) {
-            respuesta.setError(true);
-            respuesta.setMensaje("Envio inválido o sin id.");
-            return respuesta;
-        }
-        if (conexionBD != null) {
-            try {
-                int filas = conexionBD.update("envio.editar", envio);
-                conexionBD.commit();
                 if (filas > 0) {
-                    respuesta.setError(false);
-                    respuesta.setMensaje("Envío actualizado correctamente.");
-                } else {
-                    respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró el envío para actualizar.");
+                    if (envio.getNumGuia() == null || envio.getNumGuia().trim().isEmpty()) {
+                        String guiaGen = String.format("PW-%06d", envio.getId());
+                        envio.setNumGuia(guiaGen);
+                        conexionBD.update("envio.actualizar-guia", envio);
+                    }
                 }
-            } catch (Exception e) {
-                respuesta.setError(true);
-                respuesta.setMensaje("Error al editar: " + e.getMessage());
-            } finally {
-                conexionBD.close();
-            }
-        } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("No hubo conexión con la Base de Datos.");
-        }
-        return respuesta;
-    }
 
-    public static Respuesta cambiarEstatus(int id, String estatus, Integer idColaborador) {
-        Respuesta respuesta = new Respuesta();
-        SqlSession conexionBD = MyBatisUtil.getSession();
-        if (id <= 0) {
-            respuesta.setError(true);
-            respuesta.setMensaje("ID inválido.");
-            return respuesta;
-        }
-        if (estatus == null || estatus.trim().isEmpty()) {
-            respuesta.setError(true);
-            respuesta.setMensaje("Estatus inválido.");
-            return respuesta;
-        }
-        if (conexionBD != null) {
-            try {
-                pojo.Envio e = new pojo.Envio();
-                e.setId(id);
-                e.setEstatus(estatus);
-                e.setIdColaboradorActualizo(idColaborador);
-
-                int filas = conexionBD.update("envio.cambiar-estatus", e);
+                if (paquetes != null) {
+                    for (Paquete p : paquetes) {
+                        p.setIdEnvio(envio.getId());
+                        if (p.getCantidad() == null || p.getCantidad() <= 0) p.setCantidad(1);
+                        if (p.getValor() == null) p.setValor(BigDecimal.ZERO);
+                        conexionBD.insert("paquete.registrar", p);
+                    }
+                }
+                
                 conexionBD.commit();
-                if (filas > 0) {
-                    respuesta.setError(false);
-                    respuesta.setMensaje("Estatus actualizado a: " + estatus);
-                } else {
-                    respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró el envío para actualizar estado.");
-                }
-            } catch (Exception ex) {
+                respuesta.setError(false);
+                respuesta.setMensaje("Envío registrado. Costo: $" + costoTotal);
+            } catch (Exception e) {
+                conexionBD.rollback();
                 respuesta.setError(true);
-                respuesta.setMensaje("Error al actualizar estatus: " + ex.getMessage());
+                respuesta.setMensaje("Error BD: " + e.getMessage());
+                e.printStackTrace();
             } finally {
                 conexionBD.close();
             }
         } else {
             respuesta.setError(true);
-            respuesta.setMensaje("No hubo conexión con la base de datos.");
+            respuesta.setMensaje("Sin conexión a BD.");
         }
         return respuesta;
     }
 
-    public static Respuesta eliminar(int id) {
-        Respuesta respuesta = new Respuesta();
+    public static void recalcularCosto(int idEnvio) {
         SqlSession conexionBD = MyBatisUtil.getSession();
-        if (id <= 0) {
-            respuesta.setError(true);
-            respuesta.setMensaje("ID inválido.");
-            return respuesta;
-        }
-        if (conexionBD != null) {
-            try {
-                int filas = conexionBD.delete("envio.eliminar", id);
-                conexionBD.commit();
-                if (filas > 0) {
-                    respuesta.setError(false);
-                    respuesta.setMensaje("Envío eliminado correctamente.");
-                } else {
-                    respuesta.setError(true);
-                    respuesta.setMensaje("No se encontró el envío para eliminar.");
-                }
-            } catch (Exception e) {
-                respuesta.setError(true);
-                respuesta.setMensaje("Error al eliminar: " + e.getMessage());
-            } finally {
-                conexionBD.close();
+        if (conexionBD == null) return;
+
+        try {
+            Envio envio = conexionBD.selectOne("envio.obtener-por-id", idEnvio);
+            if (envio == null) return;
+
+            if (envio.getIdSucursalOrigen() == null || envio.getIdCliente() == null) {
+                System.out.println("ERROR: El envío " + idEnvio + " tiene IDs nulos. Verifica el Mapper.");
+                return;
             }
-        } else {
-            respuesta.setError(true);
-            respuesta.setMensaje("No hubo conexión con la Base de Datos.");
+
+            List<Paquete> paquetes = conexionBD.selectList("paquete.obtener-por-envio", idEnvio);
+            
+            int totalPaquetes = 0;
+            double totalPeso = 0.0;
+
+            if (paquetes != null) {
+                for (Paquete p : paquetes) {
+                    int q = (p.getCantidad() != null && p.getCantidad() > 0) ? p.getCantidad() : 1;
+                    totalPaquetes += q;
+                    double pesoUnit = (p.getPeso() != null) ? p.getPeso().doubleValue() : 0.0;
+                    totalPeso += (pesoUnit * q);
+                }
+            }
+            if (totalPaquetes == 0) totalPaquetes = 1;
+
+            Sucursal suc = SucursalImp.obtenerPorId(envio.getIdSucursalOrigen());
+            Cliente cli = ClienteImp.obtenerPorId(envio.getIdCliente());
+            
+            if (suc != null && cli != null && suc.getCodigoPostal() != null && cli.getCp() != null) {
+                Double distancia = obtenerDistanciaWS(suc.getCodigoPostal(), cli.getCp());
+                
+                if (distancia != null) {
+                    double nuevoCosto = calcularCostoLogica(distancia, totalPaquetes);
+                    
+                    envio.setCosto(nuevoCosto);
+                    envio.setPeso(new BigDecimal(totalPeso));
+                    
+                    conexionBD.update("envio.editar", envio);
+                    conexionBD.commit();
+                    System.out.println("Recálculo exitoso para Envío " + idEnvio + ": $" + nuevoCosto);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            conexionBD.rollback();
+        } finally {
+            conexionBD.close();
         }
-        return respuesta;
     }
-    
+
+    private static double calcularCostoLogica(double distancia, int numPaquetes) {
+        double costoPorKm = 0.50; 
+
+        if (distancia >= 1 && distancia <= 200) costoPorKm = 4.00;
+        else if (distancia > 200 && distancia <= 500) costoPorKm = 3.00;
+        else if (distancia > 500 && distancia <= 1000) costoPorKm = 2.00;
+        else if (distancia > 1000 && distancia <= 2000) costoPorKm = 1.00;
+
+        double costoBase = distancia * costoPorKm;
+
+        double costoAdicional = 0.0;
+        if (numPaquetes == 2) costoAdicional = 50.00;
+        else if (numPaquetes == 3) costoAdicional = 80.00;
+        else if (numPaquetes == 4) costoAdicional = 110.00;
+        else if (numPaquetes >= 5) costoAdicional = 150.00;
+
+        return costoBase + costoAdicional;
+    }
+
     private static Double obtenerDistanciaWS(String cpOrigen, String cpDestino) {
         try {
             String urlStr = "http://sublimas.com.mx:8080/calculadora/api/envios/distancia/" + cpOrigen + "," + cpDestino;
@@ -254,52 +206,78 @@ public class EnvioImp {
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
 
-            if (conn.getResponseCode() != 200) {
-                System.out.println("API Distancia error HTTP: " + conn.getResponseCode());
-                return null;
-            }
+            if (conn.getResponseCode() != 200) return null;
 
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
             StringBuilder sb = new StringBuilder();
             String output;
-            while ((output = br.readLine()) != null) {
-                sb.append(output);
-            }
+            while ((output = br.readLine()) != null) sb.append(output);
             conn.disconnect();
 
             Gson gson = new Gson();
             DistanciaRespuesta response = gson.fromJson(sb.toString(), DistanciaRespuesta.class);
 
-            if (!response.isError()) {
-                return response.getDistanciaKM();
-            } else {
-                System.out.println("API Distancia error lógico: " + response.getMensaje());
-                return null;
-            }
-
+            return (!response.isError()) ? response.getDistanciaKM() : null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
-    private static double calcularCostoEnvio(double distancia, int numPaquetes) {
-        double costoPorKm = 0.0;
-
-        if (distancia >= 1 && distancia <= 200) {
-            costoPorKm = 4.00;
-        } else if (distancia > 200 && distancia <= 500) {
-            costoPorKm = 3.00;
-        } else if (distancia > 500 && distancia <= 1000) {
-            costoPorKm = 2.00;
-        } else if (distancia > 1000 && distancia <= 2000) {
-            costoPorKm = 1.00;
-        } else if (distancia > 2000) {
-            costoPorKm = 0.50;
-        }
-
-        return (distancia * costoPorKm);
-    }
-
     
+    public static Respuesta editar(Envio envio) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (envio == null || envio.getId() == null) return new Respuesta(true, "Datos inválidos");
+        if (conexionBD != null) {
+            try {
+                int filas = conexionBD.update("envio.editar", envio);
+                conexionBD.commit();
+                if (filas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Envío actualizado.");
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("No encontrado.");
+                }
+            } catch (Exception e) {
+                respuesta.setError(true);
+                respuesta.setMensaje("Error: " + e.getMessage());
+            } finally { conexionBD.close(); }
+        }
+        return respuesta;
+    }
+    public static Respuesta eliminar(int id) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (id <= 0) return new Respuesta(true, "ID inválido");
+        if (conexionBD != null) {
+            try {
+                int filas = conexionBD.delete("envio.eliminar", id);
+                conexionBD.commit();
+                if(filas>0) { respuesta.setError(false); respuesta.setMensaje("Eliminado"); }
+                else { respuesta.setError(true); respuesta.setMensaje("No encontrado"); }
+            } catch(Exception e){ e.printStackTrace(); } finally { conexionBD.close(); }
+        }
+        return respuesta;
+    }
+    public static Respuesta cambiarEstatus(int id, String estatus, Integer idColaborador) {
+        Respuesta respuesta = new Respuesta();
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (id <= 0) return new Respuesta(true, "ID inválido");
+        if (estatus == null) return new Respuesta(true, "Estatus inválido");
+        if (conexionBD != null) {
+            try {
+                pojo.Envio e = new pojo.Envio();
+                e.setId(id);
+                e.setEstatus(estatus);
+                e.setIdColaboradorActualizo(idColaborador);
+                int filas = conexionBD.update("envio.cambiar-estatus", e);
+                conexionBD.commit();
+                if (filas > 0) { respuesta.setError(false); respuesta.setMensaje("Estatus actualizado"); }
+                else { respuesta.setError(true); respuesta.setMensaje("No encontrado"); }
+            } catch(Exception ex) { respuesta.setError(true); respuesta.setMensaje(ex.getMessage()); }
+            finally { conexionBD.close(); }
+        }
+        return respuesta;
+    }
 }
