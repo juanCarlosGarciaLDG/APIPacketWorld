@@ -40,10 +40,14 @@
 						"body": {
 							"mode": "raw",
 <<<<<<< HEAD
+<<<<<<< HEAD
 							"raw": "{\r\n  \"noPersonal\": \"POSTMAN-002\",\r\n  \"curp\": \"TEST880101HDFRRA01\",\r\n  \"nombre\": \"Roberto\",\r\n  \"apellidoPaterno\": \"Pruebas\",\r\n  \"apellidoMaterno\": \"Postman\",\r\n  \"email\": \"roberto.test@empresa.com\",\r\n  \"contrasena\": \"segura123\",\r\n  \"rol\": \"Conductor\",\r\n  \"idSucursal\": 1,\r\n  \"licencia\": \"LIC-TEST-999\",\r\n  \"foto\": [], \r\n  \"activo\": true\r\n}",
 =======
 							"raw": "{\r\n  \"noPersonal\": \"POSTMAN-002\",\r\n  \"curp\": \"TEST880101HDFRRA01\",\r\n  \"nombre\": \"Roberto\",\r\n  \"apellidoPaterno\": \"Pruebas\",\r\n  \"apellidoMaterno\": \"Postman\",\r\n  \"email\": \"roberto.test@empresa.com\",\r\n  \"contrasena\": \"segura123\",\r\n  \"rol\": \"Conductor\",\r\n  \"idSucursal\": 2,\r\n  \"licencia\": \"LIC-TEST-999\",\r\n  \"foto\": [], \r\n  \"activo\": true\r\n}",
 >>>>>>> feature/conductor-asignacion
+=======
+							"raw": "{\r\n  \"noPersonal\": \"POSTMAN-002\",\r\n  \"curp\": \"TEST880101HDFRRA01\",\r\n  \"nombre\": \"Roberto\",\r\n  \"apellidoPaterno\": \"Pruebas\",\r\n  \"apellidoMaterno\": \"Postman\",\r\n  \"email\": \"roberto.test@empresa.com\",\r\n  \"contrasena\": \"segura123\",\r\n  \"rol\": \"Conductor\",\r\n  \"idSucursal\": 2,\r\n  \"licencia\": \"LIC-TEST-999\",\r\n  \"foto\": [], \r\n  \"activo\": true\r\n}",
+>>>>>>> origin/feature/mis-cambios-api
 							"options": {
 								"raw": {
 									"language": "json"
@@ -175,7 +179,10 @@
 				}
 			]
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/feature/mis-cambios-api
 		},
 		{
 			"name": "Clientes",
@@ -1287,7 +1294,10 @@
 					"response": []
 				}
 			]
+<<<<<<< HEAD
 >>>>>>> feature/conductor-asignacion
+=======
+>>>>>>> origin/feature/mis-cambios-api
 		}
 	]
 }

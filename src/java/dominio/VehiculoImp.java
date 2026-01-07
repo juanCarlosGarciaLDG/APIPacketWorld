@@ -82,22 +82,22 @@ public class VehiculoImp {
     public static Respuesta registrar(Vehiculo vehiculo) {
         Respuesta respuesta = new Respuesta();
         SqlSession conexionBD = MyBatisUtil.getSession();
-        
+
         if (conexionBD != null) {
             try {
-                // Validación de tipo de unidad
+
                 if (!validarTipoUnidad(vehiculo.getTipoUnidad())) {
                     respuesta.setError(true);
                     respuesta.setMensaje("Tipo de unidad inválido. Valores permitidos: Gasolina, Diesel, Eléctrica, Híbrida");
                     return respuesta;
                 }
-                
+
                 String nii = generarNII(vehiculo.getAnio(), vehiculo.getVin());
                 vehiculo.setNii(nii);
 
                 int filas = conexionBD.insert("vehiculo.registrar", vehiculo);
                 conexionBD.commit();
-                
+
                 if (filas > 0) {
                     respuesta.setError(false);
                     respuesta.setMensaje("Vehículo registrado. NII asignado: " + nii);
@@ -180,13 +180,14 @@ public class VehiculoImp {
 
                 int filas = conexionBD.update("vehiculo.dar-baja", params);
                 conexionBD.commit();
-                
+
                 if (filas > 0) {
                     respuesta.setError(false);
-                    respuesta.setMensaje("Vehículo dado de baja correctamente.");
+                    respuesta.setMensaje("Vehículo dado de baja.");
                 } else {
                     respuesta.setError(true);
-                    respuesta.setMensaje("El vehículo no existe o ya estaba inactivo.");
+                    respuesta.setMensaje("No se encontró el vehículo.");
+
                 }
             } catch (Exception e) {
                 respuesta.setError(true);

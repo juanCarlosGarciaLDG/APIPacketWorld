@@ -19,6 +19,13 @@ import pojo.Paquete;
 
 @Path("paquete")
 public class PaqueteWS {
+    
+    @Path("obtener-todos")
+@GET
+@Produces(MediaType.APPLICATION_JSON)
+public List<Paquete> obtenerTodos() {
+    return PaqueteImp.obtenerTodos();
+}
 
     @Path("obtener-por-envio/{idEnvio}")
     @GET

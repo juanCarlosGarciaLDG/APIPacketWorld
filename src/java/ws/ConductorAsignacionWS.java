@@ -56,4 +56,10 @@ public class ConductorAsignacionWS {
         Integer vehiculoId;
         Integer envioId;
     }
+    @Path("desasignar-envio-por-envio/{envioId}")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Respuesta desasignarEnvioPorEnvio(@PathParam("envioId") int envioId) {
+        return ConductorAsignacionImp.desasignarEnvioPorEnvio(envioId);
+    }
 }
