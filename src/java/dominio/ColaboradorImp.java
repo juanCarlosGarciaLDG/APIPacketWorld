@@ -176,4 +176,23 @@ public class ColaboradorImp {
 
         return colaborador;
     }
+    
+    public static Colaborador login(String noPersonal, String password) {
+        Colaborador colaborador = null;
+        SqlSession conexionBD = MyBatisUtil.getSession();
+        if (conexionBD != null) {
+            try {
+                java.util.Map<String, String> parametros = new java.util.HashMap<>();
+                parametros.put("noPersonal", noPersonal);
+                parametros.put("contrasena", password);
+                
+                colaborador = conexionBD.selectOne("colaborador.login", parametros);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        }
+        return colaborador;
+    }
 }

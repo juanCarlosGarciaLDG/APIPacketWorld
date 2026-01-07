@@ -16,6 +16,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import pojo.Colaborador;
+import com.google.gson.JsonObject; 
+import com.google.gson.JsonParser;
+import java.util.HashMap;
 
 /**
  *
@@ -102,6 +105,37 @@ public class ColaboradorWS {
         } else {
             throw new BadRequestException();
         }
+    }
+    
+    @Path("login")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String login(String json) {
+        Gson gson = new Gson();
+        HashMap<String, Object> respuesta = new HashMap<>(); 
+        
+        try {
+            JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+            String noPersonal = jsonObject.get("noPersonal").getAsString();
+            String contrasena = jsonObject.get("contrasena").getAsString(); 
+
+            Colaborador colaborador = ColaboradorImp.login(noPersonal, contrasena);
+
+            if (colaborador != null) {
+                respuesta.put("error", false);
+                respuesta.put("mensaje", "Bienvenido(a) " + colaborador.getNombre());
+                respuesta.put("colaborador", colaborador);
+            } else {
+                respuesta.put("error", true);
+                respuesta.put("mensaje", "Credenciales incorrectas.");
+            }
+        } catch (Exception e) {
+            respuesta.put("error", true);
+            respuesta.put("mensaje", "Error en el servicio: " + e.getMessage());
+        }
+        
+        return gson.toJson(respuesta);
     }
 
 }
