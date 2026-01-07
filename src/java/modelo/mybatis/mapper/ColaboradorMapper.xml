@@ -36,17 +36,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <update id="editar" parameterType="pojo.Colaborador">
         UPDATE colaboradores
-        SET 
-        no_personal = #{noPersonal},
-        curp = #{curp},
-        nombre = #{nombre}, 
-        apellido_paterno = #{apellidoPaterno}, 
-        apellido_materno = #{apellidoMaterno}, 
-        email = #{email},
-        rol = #{rol},
-        id_sucursal = #{idSucursal},
-        licencia = #{licencia},
-        activo = #{activo}
+        <set>
+            <if test="noPersonal != null">no_personal = #{noPersonal},</if>
+            <if test="curp != null">curp = #{curp},</if>
+            <if test="nombre != null">nombre = #{nombre},</if>
+            <if test="apellidoPaterno != null">apellido_paterno = #{apellidoPaterno},</if>
+            <if test="apellidoMaterno != null">apellido_materno = #{apellidoMaterno},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="rol != null">rol = #{rol},</if>
+            <if test="idSucursal != null">id_sucursal = #{idSucursal},</if>
+            <if test="licencia != null">licencia = #{licencia},</if>
+            <if test="activo != null">activo = #{activo},</if>
+            <if test="contrasena != null and contrasena != ''">contrasena = #{contrasena},</if>
+        </set>
         WHERE id_colaborador = #{idColaborador}
     </update>
     
@@ -82,7 +84,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             c.id_sucursal AS idSucursal,
             s.nombre AS sucursal, 
             c.licencia,
-            c.activo
+            c.activo,
+            TO_BASE64(c.foto) AS fotoBase64
         FROM colaboradores c
         INNER JOIN sucursales s ON c.id_sucursal = s.id_sucursal
         WHERE c.no_personal = #{noPersonal} 

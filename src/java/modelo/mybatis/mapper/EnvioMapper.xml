@@ -5,25 +5,60 @@
 
 <mapper namespace="envio">
 
-  <select id="obtener-todos" resultType="pojo.Envio">
+  <resultMap id="mapaEnvioCompleto" type="pojo.Envio">
+    <id property="id" column="id"/>
+    <result property="idCliente" column="idCliente"/>
+    <result property="numGuia" column="numGuia"/>
+    <result property="direccionDestino" column="direccionDestino"/>
+    <result property="ciudadDestino" column="ciudadDestino"/>
+    <result property="estadoDestino" column="estadoDestino"/>
+    <result property="estatus" column="estatus"/>
+    <result property="costo" column="costo"/>
+    <result property="destinatarioNombre" column="destinatarioNombre"/>
+    <result property="destinatarioTelefono" column="destinatarioTelefono"/>
+    <result property="fechaCreacion" column="fechaCreacion"/>
+    <result property="peso" column="peso"/>
+    <result property="idColaboradorActualizo" column="idColaboradorActualizo"/>
+    
+    <result property="sucursalOrigen" column="sucursalNombre"/>
+    <result property="direccionOrigen" column="direccionOrigen"/>
+    <result property="nombreCliente" column="nombreCliente"/>
+    <result property="telefonoCliente" column="telefonoCliente"/>
+    <result property="correoCliente" column="correoCliente"/>
+
+    <collection property="paquetes" column="id" 
+                select="paquete.obtener-por-envio"/>
+  </resultMap>
+
+  <select id="obtener-todos" resultMap="mapaEnvioCompleto">
     SELECT
-      id,
-      id_cliente AS idCliente,
-      num_guia AS numGuia,
-      direccion_destino AS direccionDestino,
-      ciudad_destino AS ciudadDestino,
-      estado_destino AS estadoDestino,
-      id_sucursal_origen AS idSucursalOrigen,
-      costo,
-      estatus,
-      fecha_creacion AS fechaCreacion,
-      destinatario_nombre AS destinatarioNombre,
-      destinatario_telefono AS destinatarioTelefono,
-      peso,
-      fecha_actualizacion AS fechaActualizacion,
-      id_colaborador_actualizo AS idColaboradorActualizo
-    FROM envios
-    ORDER BY fecha_creacion DESC
+      e.id,
+      e.id_cliente AS idCliente,
+      e.num_guia AS numGuia,
+      e.direccion_destino AS direccionDestino,
+      e.ciudad_destino AS ciudadDestino,
+      e.estado_destino AS estadoDestino,
+      e.costo,
+      e.estatus,
+      e.fecha_creacion AS fechaCreacion,
+      e.destinatario_nombre AS destinatarioNombre,
+      e.destinatario_telefono AS destinatarioTelefono,
+      e.peso,
+      e.id_colaborador_actualizo AS idColaboradorActualizo,
+      
+      -- 1. Datos de Sucursal (Origen)
+      s.nombre AS sucursalNombre,
+      CONCAT(s.calle, ' #', s.numero, ', ', s.colonia, ', ', s.codigo_postal) AS direccionOrigen,
+      
+      -- 2. Datos de Cliente (Remitente)
+      CONCAT(c.nombre, ' ', c.apellido) AS nombreCliente,
+      c.telefono AS telefonoCliente,
+      c.correo AS correoCliente
+
+    FROM envios e
+    INNER JOIN sucursales s ON e.id_sucursal_origen = s.id_sucursal
+    INNER JOIN clientes c ON e.id_cliente = c.id
+    ORDER BY e.fecha_creacion DESC
   </select>
 
   <select id="obtener-por-id" parameterType="int" resultType="pojo.Envio">
@@ -78,12 +113,10 @@
     DELETE FROM envios WHERE id = #{id}
   </delete>
 
- <!-- Devuelve id del envío que actualmente tiene asignado al conductor (si existe) -->
   <select id="findEnvioByConductor" parameterType="int" resultType="int" >
     SELECT id FROM envios WHERE id_colaborador_actualizo = #{conductorId} LIMIT 1
   </select>
 
-  <!-- Actualiza el envío para guardar el id del colaborador que lo actualizó/asignó -->
   <update id="updateEnvioSetColaborador" parameterType="map">
     UPDATE envios
     SET id_colaborador_actualizo = #{conductorId},
@@ -91,11 +124,11 @@
     WHERE id = #{envioId}
   </update>
 
-  <!-- Quitar asignación -->
   <update id="clearEnvioColaborador" parameterType="int">
     UPDATE envios
     SET id_colaborador_actualizo = NULL,
         fecha_actualizacion = NOW()
     WHERE id = #{envioId}
   </update>
+
 </mapper>

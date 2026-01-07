@@ -20,13 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <select id="obtener-todos" resultMap="VehiculoResultMap">
-<<<<<<< HEAD
-        SELECT * FROM vehiculos 
-        WHERE activo = 1
-        ORDER BY marca, modelo
-=======
         SELECT * FROM vehiculos ORDER BY marca, modelo
->>>>>>> origin/feature/mis-cambios-api
     </select>
   
     <select id="obtener-disponibles" resultType="pojo.Vehiculo">

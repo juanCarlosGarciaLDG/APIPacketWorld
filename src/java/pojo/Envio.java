@@ -2,6 +2,7 @@ package pojo;
 
 import dto.Respuesta;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class Envio {
     private Integer id;
@@ -19,6 +20,13 @@ public class Envio {
     private BigDecimal peso;
     private String fechaActualizacion;
     private Integer idColaboradorActualizo;
+    private String direccionOrigen; 
+    private List<Paquete> paquetes;
+    private String sucursalOrigen;
+    private String nombreCliente;  
+    private String telefonoCliente;
+    private String correoCliente;     
+    
 
     public Envio() {}
 
@@ -65,5 +73,23 @@ public class Envio {
     public void setFechaActualizacion(String fechaActualizacion) { this.fechaActualizacion = fechaActualizacion; }
 
     public Integer getIdColaboradorActualizo() { return idColaboradorActualizo; }
-    public void setIdColaboradorActualizo(Integer idColaboradorActualizo) { this.idColaboradorActualizo = idColaboradorActualizo; }
+    public void setIdColaboradorActualizo(Integer idColaboradorActualizo) { this.idColaboradorActualizo = idColaboradorActualizo; }         
+    
+    public String getNombreCliente() { return nombreCliente; }
+    public void setNombreCliente(String nombreCliente) { this.nombreCliente = nombreCliente; }
+
+    public String getTelefonoCliente() { return telefonoCliente; }
+    public void setTelefonoCliente(String telefonoCliente) { this.telefonoCliente = telefonoCliente; }
+
+    public String getCorreoCliente() { return correoCliente; }
+    public void setCorreoCliente(String correoCliente) { this.correoCliente = correoCliente; }
+
+    public String getSucursalOrigen() { return sucursalOrigen; }
+    public void setSucursalOrigen(String sucursalOrigen) { this.sucursalOrigen = sucursalOrigen; }
+
+    public String getDireccionOrigen() { return direccionOrigen; }
+    public void setDireccionOrigen(String direccionOrigen) { this.direccionOrigen = direccionOrigen; }
+
+    public List<Paquete> getPaquetes() { return paquetes; }
+    public void setPaquetes(List<Paquete> paquetes) { this.paquetes = paquetes; }
 }
