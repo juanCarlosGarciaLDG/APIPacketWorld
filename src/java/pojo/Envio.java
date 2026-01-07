@@ -11,7 +11,7 @@ public class Envio {
     private String ciudadDestino;
     private String estadoDestino;
     private Integer idSucursalOrigen;
-    private BigDecimal costo;
+    private double costo;
     private String estatus; // 'recibido','procesado','en_transito','entregado','cancelado'
     private String fechaCreacion;
     private String destinatarioNombre;
@@ -43,8 +43,8 @@ public class Envio {
     public Integer getIdSucursalOrigen() { return idSucursalOrigen; }
     public void setIdSucursalOrigen(Integer idSucursalOrigen) { this.idSucursalOrigen = idSucursalOrigen; }
 
-    public BigDecimal getCosto() { return costo; }
-    public void setCosto(BigDecimal costo) { this.costo = costo; }
+    public double getCosto() { return costo; }
+    public void setCosto(double costo) { this.costo = costo; }
 
     public String getEstatus() { return estatus; }
     public void setEstatus(String estatus) { this.estatus = estatus; }

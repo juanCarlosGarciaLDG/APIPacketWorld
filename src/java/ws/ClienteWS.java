@@ -35,6 +35,19 @@ public class ClienteWS {
         return lista;
     }
 
+    @GET
+    @Path("obtener/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Cliente obtenerPorId(@PathParam("id") Integer id) {
+        if (id != null && id > 0) {
+            Cliente cliente = ClienteImp.obtenerPorId(id);
+            if (cliente != null) {
+                return cliente;
+            }
+        }
+        throw new BadRequestException("No se encontró un cliente con el ID proporcionado.");
+    }
+    
     // ... el resto de métodos (registrar, editar, eliminar, verificar) se mantienen igual
     @Path("registrar")
     @POST
