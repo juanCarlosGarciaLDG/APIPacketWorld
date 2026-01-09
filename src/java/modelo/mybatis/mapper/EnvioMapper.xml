@@ -22,6 +22,7 @@
         <result property="peso" column="peso"/> 
         <result property="idColaboradorActualizo" column="idColaboradorActualizo"/>
         <result property="idConductor" column="idConductor"/>
+        <result property="nombreConductor" column="nombreConductor"/>
         <result property="idSucursalOrigen" column="idSucursalOrigen"/>
         <result property="sucursalOrigen" column="sucursalNombre"/> 
         <result property="direccionOrigen" column="direccionOrigen"/> 
@@ -77,9 +78,38 @@
         FROM envios e 
         WHERE e.id = #{id} </select>
 
-    <select id="obtener-por-guia" parameterType="string" resultType="pojo.Envio">
-        SELECT <include refid="columnasEnvio"/>
+    <select id="obtener-por-guia" parameterType="string" resultMap="mapaEnvio">
+        SELECT 
+        e.id, 
+        e.id_cliente AS idCliente, 
+        e.num_guia AS numGuia, 
+        e.direccion_destino AS direccionDestino, 
+        e.ciudad_destino AS ciudadDestino, 
+        e.estado_destino AS estadoDestino, 
+        e.costo, 
+        e.estatus, 
+        e.fecha_creacion AS fechaCreacion, 
+        e.fecha_actualizacion AS fechaActualizacion,
+        e.destinatario_nombre AS destinatarioNombre, 
+        e.destinatario_telefono AS destinatarioTelefono, 
+        e.peso, 
+        e.id_colaborador_actualizo AS idColaboradorActualizo, 
+        e.id_conductor AS idConductor,
+        e.id_sucursal_origen AS idSucursalOrigen,
+        s.nombre AS sucursalNombre, 
+        CONCAT(s.calle, ' #', s.numero, ', ', s.colonia, ', ', s.codigo_postal) AS direccionOrigen,
+        CONCAT(c.nombre, ' ', c.apellido) AS nombreCliente, 
+        c.telefono AS telefonoCliente, 
+        c.correo AS correoCliente,
+        
+        CONCAT(co.nombre, ' ', co.apellido_paterno) AS nombreConductor
+
         FROM envios e 
+        LEFT JOIN sucursales s ON e.id_sucursal_origen = s.id_sucursal 
+        LEFT JOIN clientes c ON e.id_cliente = c.id 
+    
+        LEFT JOIN colaboradores co ON e.id_conductor = co.id_colaborador
+    
         WHERE e.num_guia = #{numGuia}
     </select>
 

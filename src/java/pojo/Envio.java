@@ -22,6 +22,15 @@ public class Envio {
     private String fechaActualizacion;
     private Integer idColaboradorActualizo;
     private Integer idConductor;
+    private String nombreConductor;
+
+    public String getNombreConductor() {
+        return nombreConductor;
+    }
+
+    public void setNombreConductor(String nombreConductor) {
+        this.nombreConductor = nombreConductor;
+    }
     private String direccionOrigen;
     private List<Paquete> paquetes;
     private String sucursalOrigen;

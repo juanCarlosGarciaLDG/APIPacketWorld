@@ -30,8 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         foto, activo) 
         VALUES(
         #{noPersonal}, #{curp}, #{nombre}, #{apellidoPaterno}, #{apellidoMaterno},
-        #{email}, #{contrasena}, #{rol}, #{idSucursal}, #{licencia},
-        #{foto}, #{activo})
+        #{email}, SHA2(#{contrasena}, 256), #{rol}, #{idSucursal}, #{licencia}, #{foto}, #{activo})
     </insert>
     
     <update id="editar" parameterType="pojo.Colaborador">
@@ -47,7 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="idSucursal != null">id_sucursal = #{idSucursal},</if>
             <if test="licencia != null">licencia = #{licencia},</if>
             <if test="activo != null">activo = #{activo},</if>
-            <if test="contrasena != null and contrasena != ''">contrasena = #{contrasena},</if>
+            <if test="contrasena != null and contrasena != ''">contrasena = SHA2(#{contrasena}, 256),</if>
         </set>
         WHERE id_colaborador = #{idColaborador}
     </update>
@@ -73,24 +72,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="login" resultType="pojo.Colaborador">
         SELECT 
-            c.id_colaborador AS idColaborador,
-            c.no_personal AS noPersonal,
-            c.curp,
-            c.nombre, 
-            c.apellido_paterno AS apellidoPaterno, 
-            c.apellido_materno AS apellidoMaterno, 
-            c.email, 
-            c.rol, 
-            c.id_sucursal AS idSucursal,
-            s.nombre AS sucursal, 
-            c.licencia,
-            c.activo,
-            TO_BASE64(c.foto) AS fotoBase64
+        c.id_colaborador AS idColaborador,
+        c.no_personal AS noPersonal,
+        c.curp,
+        c.nombre, 
+        c.apellido_paterno AS apellidoPaterno, 
+        c.apellido_materno AS apellidoMaterno, 
+        c.email, 
+        c.rol, 
+        c.id_sucursal AS idSucursal,
+        s.nombre AS sucursal, 
+        c.licencia,
+        c.activo,
+        TO_BASE64(c.foto) AS fotoBase64
         FROM colaboradores c
         INNER JOIN sucursales s ON c.id_sucursal = s.id_sucursal
         WHERE c.no_personal = #{noPersonal} 
-          AND c.contrasena = #{contrasena}
-          AND c.activo = 1
+        AND contrasena = SHA2(#{contrasena}, 256)
+        AND c.activo = 1
     </select>
     
 </mapper>
