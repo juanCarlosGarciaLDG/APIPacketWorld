@@ -147,4 +147,26 @@
         WHERE id = #{envioId}
     </update>
 
+    <select id="obtener-por-conductor" parameterType="int" resultMap="mapaEnvio"> 
+        SELECT e.id, e.id_cliente AS idCliente, 
+        e.num_guia AS numGuia, 
+        e.direccion_destino AS direccionDestino, 
+        e.ciudad_destino AS ciudadDestino, 
+        e.estado_destino AS estadoDestino, 
+        e.costo, e.estatus, e.fecha_creacion AS fechaCreacion, 
+        e.destinatario_nombre AS destinatarioNombre, 
+        e.destinatario_telefono AS destinatarioTelefono, 
+        e.peso, e.id_colaborador_actualizo AS idColaboradorActualizo, 
+        e.id_conductor AS idConductor,
+        e.id_sucursal_origen AS idSucursalOrigen,
+        s.nombre AS sucursalNombre, 
+        CONCAT(s.calle, ' #', s.numero, ', ', s.colonia, ', ', s.codigo_postal) AS direccionOrigen,
+        CONCAT(c.nombre, ' ', c.apellido) AS nombreCliente, 
+        c.telefono AS telefonoCliente, c.correo AS correoCliente 
+        FROM envios e 
+        LEFT JOIN sucursales s ON e.id_sucursal_origen = s.id_sucursal 
+        LEFT JOIN clientes c ON e.id_cliente = c.id 
+        WHERE e.id_conductor = #{idConductor}  ORDER BY e.fecha_creacion DESC 
+    </select>
+
 </mapper>

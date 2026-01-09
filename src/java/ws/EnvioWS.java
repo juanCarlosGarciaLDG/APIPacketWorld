@@ -149,4 +149,16 @@ public class EnvioWS {
             throw new BadRequestException("ID inválido");
         }
     }
+
+    @Path("obtener-por-conductor/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Envio> obtenerPorConductor(@PathParam("id") int id) {
+        if (id > 0) {
+            return EnvioImp.obtenerPorConductor(id);
+        } else {
+            throw new BadRequestException("ID de conductor inválido");
+        }
+    }
+
 }
