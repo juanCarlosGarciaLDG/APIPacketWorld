@@ -17,6 +17,7 @@
         <result property="destinatarioNombre" column="destinatarioNombre"/> 
         <result property="destinatarioTelefono" column="destinatarioTelefono"/> 
         <result property="fechaCreacion" column="fechaCreacion"/> 
+        <result property="fechaActualizacion" column="fechaActualizacion" />
         <result property="motivo" column="motivo"/>
         <result property="peso" column="peso"/> 
         <result property="idColaboradorActualizo" column="idColaboradorActualizo"/>
@@ -55,6 +56,7 @@
         e.ciudad_destino AS ciudadDestino, 
         e.estado_destino AS estadoDestino, 
         e.costo, e.estatus, e.fecha_creacion AS fechaCreacion, 
+        e.fecha_actualizacion AS fechaActualizacion,
         e.destinatario_nombre AS destinatarioNombre, 
         e.destinatario_telefono AS destinatarioTelefono, 
         e.peso, e.id_colaborador_actualizo AS idColaboradorActualizo, 
