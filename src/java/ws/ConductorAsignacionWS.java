@@ -41,7 +41,8 @@ public class ConductorAsignacionWS {
     public Respuesta asignarEnvio(@PathParam("conductorId") int conductorId, String json) {
         Gson gson = new Gson();
         AssignRequest req = gson.fromJson(json, AssignRequest.class);
-        return ConductorAsignacionImp.asignarEnvio(conductorId, req.envioId);
+
+        return ConductorAsignacionImp.asignarEnvio(conductorId, req.envioId, req.usuarioLogueadoId);
     }
 
     @Path("desasignar-envio/{conductorId}")
@@ -51,15 +52,26 @@ public class ConductorAsignacionWS {
         return ConductorAsignacionImp.desasignarEnvio(conductorId);
     }
 
-    // clase interna para request simple { "vehiculoId": 1 } o { "envioId": 2 }
     private static class AssignRequest {
+
         Integer vehiculoId;
         Integer envioId;
+        Integer usuarioLogueadoId;
     }
+
     @Path("desasignar-envio-por-envio/{envioId}")
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Respuesta desasignarEnvioPorEnvio(@PathParam("envioId") int envioId) {
-        return ConductorAsignacionImp.desasignarEnvioPorEnvio(envioId);
+    public Respuesta desasignarEnvioPorEnvio(@PathParam("envioId") int envioId, String json) {
+        Gson gson = new Gson();
+        AssignRequest req = gson.fromJson(json, AssignRequest.class);
+
+        Integer usuarioId = null;
+        if (req != null) {
+            usuarioId = req.usuarioLogueadoId;
+        }
+
+        return ConductorAsignacionImp.desasignarEnvioPorEnvio(envioId, usuarioId);
     }
 }

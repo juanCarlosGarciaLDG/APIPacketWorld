@@ -19,6 +19,7 @@
         <result property="fechaCreacion" column="fechaCreacion"/> 
         <result property="peso" column="peso"/> 
         <result property="idColaboradorActualizo" column="idColaboradorActualizo"/>
+        <result property="idConductor" column="idConductor"/>
         <result property="idSucursalOrigen" column="idSucursalOrigen"/>
         <result property="sucursalOrigen" column="sucursalNombre"/> 
         <result property="direccionOrigen" column="direccionOrigen"/> 
@@ -56,6 +57,7 @@
         e.destinatario_nombre AS destinatarioNombre, 
         e.destinatario_telefono AS destinatarioTelefono, 
         e.peso, e.id_colaborador_actualizo AS idColaboradorActualizo, 
+        e.id_conductor AS idConductor,
         e.id_sucursal_origen AS idSucursalOrigen,
         s.nombre AS sucursalNombre, 
         CONCAT(s.calle, ' #', s.numero, ', ', s.colonia, ', ', s.codigo_postal) AS direccionOrigen,
@@ -126,20 +128,20 @@
     </delete>
 
     <select id="findEnvioByConductor" parameterType="int" resultType="int" >
-        SELECT id FROM envios WHERE id_colaborador_actualizo = #{conductorId} LIMIT 1
+        SELECT id FROM envios WHERE id_conductor = #{conductorId} LIMIT 1
     </select>
 
     <update id="updateEnvioSetColaborador" parameterType="map">
         UPDATE envios
-        SET id_colaborador_actualizo = #{conductorId},
-        fecha_actualizacion = NOW()
+        SET id_conductor = #{conductorId},
+        id_colaborador_actualizo = #{usuarioLogueadoId},  fecha_actualizacion = NOW()
         WHERE id = #{envioId}
     </update>
 
-    <update id="clearEnvioColaborador" parameterType="int">
+    <update id="clearEnvioColaborador" parameterType="map">
         UPDATE envios
-        SET id_colaborador_actualizo = NULL,
-        fecha_actualizacion = NOW()
+        SET id_conductor = NULL,
+        id_colaborador_actualizo = #{usuarioLogueadoId}, fecha_actualizacion = NOW()
         WHERE id = #{envioId}
     </update>
 
