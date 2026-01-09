@@ -22,8 +22,13 @@ public class EnvioImp {
         List<Envio> lista = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
-            try { lista = conexionBD.selectList("envio.obtener-todos"); } 
-            catch (Exception e) { e.printStackTrace(); } finally { conexionBD.close(); }
+            try {
+                lista = conexionBD.selectList("envio.obtener-todos");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
         }
         return lista;
     }
@@ -32,8 +37,13 @@ public class EnvioImp {
         Envio envio = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
-            try { envio = conexionBD.selectOne("envio.obtener-por-id", id); } 
-            catch (Exception e) { e.printStackTrace(); } finally { conexionBD.close(); }
+            try {
+                envio = conexionBD.selectOne("envio.obtener-por-id", id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
         }
         return envio;
     }
@@ -42,24 +52,29 @@ public class EnvioImp {
         Envio envio = null;
         SqlSession conexionBD = MyBatisUtil.getSession();
         if (conexionBD != null) {
-            try { envio = conexionBD.selectOne("envio.obtener-por-guia", numGuia); } 
-            catch (Exception e) { e.printStackTrace(); } finally { conexionBD.close(); }
+            try {
+                envio = conexionBD.selectOne("envio.obtener-por-guia", numGuia);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
         }
         return envio;
     }
 
     public static Respuesta registrar(Envio envio, List<Paquete> paquetes) {
         Respuesta respuesta = new Respuesta();
-        
+
         if (envio.getIdSucursalOrigen() == null || envio.getIdCliente() == null) {
-             return new Respuesta(true, "Faltan datos: Sucursal Origen o Cliente.");
+            return new Respuesta(true, "Faltan datos: Sucursal Origen o Cliente.");
         }
 
         Sucursal sucursal = SucursalImp.obtenerPorId(envio.getIdSucursalOrigen());
         Cliente cliente = ClienteImp.obtenerPorId(envio.getIdCliente());
 
-        if (sucursal == null || cliente == null || 
-            sucursal.getCodigoPostal() == null || cliente.getCp() == null) {
+        if (sucursal == null || cliente == null
+                || sucursal.getCodigoPostal() == null || cliente.getCp() == null) {
             return new Respuesta(true, "Faltan códigos postales en sucursal o cliente.");
         }
 
@@ -79,10 +94,12 @@ public class EnvioImp {
                 pesoTotalDouble += (pesoUnitario * q);
             }
         }
-        if (cantidadTotalPaquetes == 0) cantidadTotalPaquetes = 1;
+        if (cantidadTotalPaquetes == 0) {
+            cantidadTotalPaquetes = 1;
+        }
 
         double costoTotal = calcularCostoLogica(distancia, cantidadTotalPaquetes);
-        
+
         envio.setCosto(costoTotal);
         envio.setPeso(new BigDecimal(pesoTotalDouble));
 
@@ -90,7 +107,7 @@ public class EnvioImp {
         if (conexionBD != null) {
             try {
                 int filas = conexionBD.insert("envio.registrar", envio);
-                
+
                 if (filas > 0) {
                     if (envio.getNumGuia() == null || envio.getNumGuia().trim().isEmpty()) {
                         String guiaGen = String.format("PW-%06d", envio.getId());
@@ -102,12 +119,16 @@ public class EnvioImp {
                 if (paquetes != null) {
                     for (Paquete p : paquetes) {
                         p.setIdEnvio(envio.getId());
-                        if (p.getCantidad() == null || p.getCantidad() <= 0) p.setCantidad(1);
-                        if (p.getValor() == null) p.setValor(BigDecimal.ZERO);
+                        if (p.getCantidad() == null || p.getCantidad() <= 0) {
+                            p.setCantidad(1);
+                        }
+                        if (p.getValor() == null) {
+                            p.setValor(BigDecimal.ZERO);
+                        }
                         conexionBD.insert("paquete.registrar", p);
                     }
                 }
-                
+
                 conexionBD.commit();
                 respuesta.setError(false);
                 respuesta.setMensaje("Envío registrado. Costo: $" + costoTotal);
@@ -128,11 +149,15 @@ public class EnvioImp {
 
     public static void recalcularCosto(int idEnvio) {
         SqlSession conexionBD = MyBatisUtil.getSession();
-        if (conexionBD == null) return;
+        if (conexionBD == null) {
+            return;
+        }
 
         try {
             Envio envio = conexionBD.selectOne("envio.obtener-por-id", idEnvio);
-            if (envio == null) return;
+            if (envio == null) {
+                return;
+            }
 
             if (envio.getIdSucursalOrigen() == null || envio.getIdCliente() == null) {
                 System.out.println("ERROR: El envío " + idEnvio + " tiene IDs nulos. Verifica el Mapper.");
@@ -140,7 +165,7 @@ public class EnvioImp {
             }
 
             List<Paquete> paquetes = conexionBD.selectList("paquete.obtener-por-envio", idEnvio);
-            
+
             int totalPaquetes = 0;
             double totalPeso = 0.0;
 
@@ -152,20 +177,22 @@ public class EnvioImp {
                     totalPeso += (pesoUnit * q);
                 }
             }
-            if (totalPaquetes == 0) totalPaquetes = 1;
+            if (totalPaquetes == 0) {
+                totalPaquetes = 1;
+            }
 
             Sucursal suc = SucursalImp.obtenerPorId(envio.getIdSucursalOrigen());
             Cliente cli = ClienteImp.obtenerPorId(envio.getIdCliente());
-            
+
             if (suc != null && cli != null && suc.getCodigoPostal() != null && cli.getCp() != null) {
                 Double distancia = obtenerDistanciaWS(suc.getCodigoPostal(), cli.getCp());
-                
+
                 if (distancia != null) {
                     double nuevoCosto = calcularCostoLogica(distancia, totalPaquetes);
-                    
+
                     envio.setCosto(nuevoCosto);
                     envio.setPeso(new BigDecimal(totalPeso));
-                    
+
                     conexionBD.update("envio.editar", envio);
                     conexionBD.commit();
                     System.out.println("Recálculo exitoso para Envío " + idEnvio + ": $" + nuevoCosto);
@@ -180,20 +207,30 @@ public class EnvioImp {
     }
 
     private static double calcularCostoLogica(double distancia, int numPaquetes) {
-        double costoPorKm = 0.50; 
+        double costoPorKm = 0.50;
 
-        if (distancia >= 1 && distancia <= 200) costoPorKm = 4.00;
-        else if (distancia > 200 && distancia <= 500) costoPorKm = 3.00;
-        else if (distancia > 500 && distancia <= 1000) costoPorKm = 2.00;
-        else if (distancia > 1000 && distancia <= 2000) costoPorKm = 1.00;
+        if (distancia >= 1 && distancia <= 200) {
+            costoPorKm = 4.00;
+        } else if (distancia > 200 && distancia <= 500) {
+            costoPorKm = 3.00;
+        } else if (distancia > 500 && distancia <= 1000) {
+            costoPorKm = 2.00;
+        } else if (distancia > 1000 && distancia <= 2000) {
+            costoPorKm = 1.00;
+        }
 
         double costoBase = distancia * costoPorKm;
 
         double costoAdicional = 0.0;
-        if (numPaquetes == 2) costoAdicional = 50.00;
-        else if (numPaquetes == 3) costoAdicional = 80.00;
-        else if (numPaquetes == 4) costoAdicional = 110.00;
-        else if (numPaquetes >= 5) costoAdicional = 150.00;
+        if (numPaquetes == 2) {
+            costoAdicional = 50.00;
+        } else if (numPaquetes == 3) {
+            costoAdicional = 80.00;
+        } else if (numPaquetes == 4) {
+            costoAdicional = 110.00;
+        } else if (numPaquetes >= 5) {
+            costoAdicional = 150.00;
+        }
 
         return costoBase + costoAdicional;
     }
@@ -206,12 +243,16 @@ public class EnvioImp {
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
 
-            if (conn.getResponseCode() != 200) return null;
+            if (conn.getResponseCode() != 200) {
+                return null;
+            }
 
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
             StringBuilder sb = new StringBuilder();
             String output;
-            while ((output = br.readLine()) != null) sb.append(output);
+            while ((output = br.readLine()) != null) {
+                sb.append(output);
+            }
             conn.disconnect();
 
             Gson gson = new Gson();
@@ -223,11 +264,13 @@ public class EnvioImp {
             return null;
         }
     }
-    
+
     public static Respuesta editar(Envio envio) {
         Respuesta respuesta = new Respuesta();
         SqlSession conexionBD = MyBatisUtil.getSession();
-        if (envio == null || envio.getId() == null) return new Respuesta(true, "Datos inválidos");
+        if (envio == null || envio.getId() == null) {
+            return new Respuesta(true, "Datos inválidos");
+        }
         if (conexionBD != null) {
             try {
                 int filas = conexionBD.update("envio.editar", envio);
@@ -242,41 +285,69 @@ public class EnvioImp {
             } catch (Exception e) {
                 respuesta.setError(true);
                 respuesta.setMensaje("Error: " + e.getMessage());
-            } finally { conexionBD.close(); }
+            } finally {
+                conexionBD.close();
+            }
         }
         return respuesta;
     }
+
     public static Respuesta eliminar(int id) {
         Respuesta respuesta = new Respuesta();
         SqlSession conexionBD = MyBatisUtil.getSession();
-        if (id <= 0) return new Respuesta(true, "ID inválido");
+        if (id <= 0) {
+            return new Respuesta(true, "ID inválido");
+        }
         if (conexionBD != null) {
             try {
                 int filas = conexionBD.delete("envio.eliminar", id);
                 conexionBD.commit();
-                if(filas>0) { respuesta.setError(false); respuesta.setMensaje("Eliminado"); }
-                else { respuesta.setError(true); respuesta.setMensaje("No encontrado"); }
-            } catch(Exception e){ e.printStackTrace(); } finally { conexionBD.close(); }
+                if (filas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Eliminado");
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("No encontrado");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
         }
         return respuesta;
     }
-    public static Respuesta cambiarEstatus(int id, String estatus, Integer idColaborador) {
+
+    public static Respuesta cambiarEstatus(Envio envio) {
         Respuesta respuesta = new Respuesta();
         SqlSession conexionBD = MyBatisUtil.getSession();
-        if (id <= 0) return new Respuesta(true, "ID inválido");
-        if (estatus == null) return new Respuesta(true, "Estatus inválido");
+
+        if (envio == null || envio.getId() == null || envio.getId() <= 0) {
+            return new Respuesta(true, "Datos de envío inválidos");
+        }
+
         if (conexionBD != null) {
             try {
-                pojo.Envio e = new pojo.Envio();
-                e.setId(id);
-                e.setEstatus(estatus);
-                e.setIdColaboradorActualizo(idColaborador);
-                int filas = conexionBD.update("envio.cambiar-estatus", e);
+                int filasAfectadas = conexionBD.update("envio.cambiar-estatus", envio);
                 conexionBD.commit();
-                if (filas > 0) { respuesta.setError(false); respuesta.setMensaje("Estatus actualizado"); }
-                else { respuesta.setError(true); respuesta.setMensaje("No encontrado"); }
-            } catch(Exception ex) { respuesta.setError(true); respuesta.setMensaje(ex.getMessage()); }
-            finally { conexionBD.close(); }
+
+                if (filasAfectadas > 0) {
+                    respuesta.setError(false);
+                    respuesta.setMensaje("Estatus actualizado correctamente.");
+                } else {
+                    respuesta.setError(true);
+                    respuesta.setMensaje("No se pudo actualizar el estatus (ID no encontrado).");
+                }
+            } catch (Exception e) {
+                respuesta.setError(true);
+                respuesta.setMensaje("Error updating database: " + e.getMessage());
+                e.printStackTrace();
+            } finally {
+                conexionBD.close();
+            }
+        } else {
+            respuesta.setError(true);
+            respuesta.setMensaje("Sin conexión a la BD.");
         }
         return respuesta;
     }

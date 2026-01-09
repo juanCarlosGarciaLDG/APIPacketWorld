@@ -17,6 +17,7 @@
         <result property="destinatarioNombre" column="destinatarioNombre"/> 
         <result property="destinatarioTelefono" column="destinatarioTelefono"/> 
         <result property="fechaCreacion" column="fechaCreacion"/> 
+        <result property="motivo" column="motivo"/>
         <result property="peso" column="peso"/> 
         <result property="idColaboradorActualizo" column="idColaboradorActualizo"/>
         <result property="idConductor" column="idConductor"/>
@@ -116,10 +117,11 @@
     </update>
 
     <update id="cambiar-estatus" parameterType="pojo.Envio">
-        UPDATE envios
-        SET estatus = #{estatus},
-        id_colaborador_actualizo = #{idColaboradorActualizo},
-        fecha_actualizacion = NOW()
+        UPDATE envios 
+        SET 
+        estatus = #{estatus},
+        motivo = #{motivo},
+        id_colaborador_actualizo = #{idColaboradorActualizo}
         WHERE id = #{id}
     </update>
 

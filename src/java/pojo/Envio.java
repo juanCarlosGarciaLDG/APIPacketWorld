@@ -26,6 +26,15 @@ public class Envio {
     private List<Paquete> paquetes;
     private String sucursalOrigen;
     private String nombreCliente;
+    private String motivo;
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
     private String telefonoCliente;
     private String correoCliente;
 
