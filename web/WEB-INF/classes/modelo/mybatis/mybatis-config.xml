@@ -9,8 +9,8 @@
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
                 <property name="url" value="jdbc:mysql://localhost:3306/packet_world?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/>
-                <property name="username" value="root"/>
-                <property name="password" value="root"/>
+                <property name="username" value="packet_user"/>    
+                <property name="password" value="packet_user"/>
                 <property name="poolMaximumActiveConnections" value="10"/>
                 <property name="poolMaximumIdleConnections" value="5"/>
             </dataSource>
