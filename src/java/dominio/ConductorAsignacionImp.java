@@ -95,29 +95,21 @@ public class ConductorAsignacionImp {
 
         SqlSession session = MyBatisUtil.getSession();
         try {
-            // 0) Validaciones
+
             Integer existingConductorForEnvio = session.selectOne("conductorAsignacion.buscarPorEnvio", envioId);
-            if (existingConductorForEnvio != null) {
+
+            if (existingConductorForEnvio != null && !existingConductorForEnvio.equals(conductorId)) {
                 r.setError(true);
-                r.setMensaje("El envío ya está asignado a un conductor (ID: " + existingConductorForEnvio + ").");
+                r.setMensaje("El envío ya está asignado a otro conductor (ID: " + existingConductorForEnvio + ").");
                 return r;
             }
 
-            Integer existingEnvioForConductor = session.selectOne("envio.findEnvioByConductor", conductorId);
-            if (existingEnvioForConductor != null && !existingEnvioForConductor.equals(envioId)) {
-                r.setError(true);
-                r.setMensaje("El conductor ya tiene asignado el envío ID: " + existingEnvioForConductor);
-                return r;
-            }
-
-            // 1) Insertar o actualizar fila conductor_asignacion (histórico / registro por conductor)
             ConductorAsignacion ca = new ConductorAsignacion();
             ca.setConductorId(conductorId);
             ca.setEnvioId(envioId);
             ca.setVehiculoId(null);
             session.insert("conductorAsignacion.insertOrUpdate", ca);
 
-            // 2) Actualizar tabla envios para reflejar asignación actual
             Map<String, Object> params = new HashMap<>();
             params.put("envioId", envioId);
             params.put("conductorId", conductorId);
@@ -128,7 +120,6 @@ public class ConductorAsignacionImp {
             r.setError(false);
             r.setMensaje("Envío asignado correctamente.");
             return r;
-
         } catch (PersistenceException ex) {
             try {
                 session.rollback();
